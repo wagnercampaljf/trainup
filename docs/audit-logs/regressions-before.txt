@@ -1,0 +1,152 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+11 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/wagner/Documentos/projetos/minha-ficha/test/data/audit_regression_test.dart
+00:00 +0: sessão encerrada rejeita alteração de série e mantém histórico
+00:00 +0 -1: sessão encerrada rejeita alteração de série e mantém histórico [E]
+  Expected: throws <Instance of 'StateError'>
+    Actual: <Instance of 'Future<int>'>
+     Which: emitted <1>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/data/audit_regression_test.dart 28:11         main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                         _CustomZone.registerUnaryCallback
+  test/data/audit_regression_test.dart 24:16         main.<fn>
+  
+00:00 +0 -1: série com zero reps não pode produzir recorde de carga
+00:00 +0 -2: série com zero reps não pode produzir recorde de carga [E]
+  Expected: throws <Instance of 'ArgumentError'>
+    Actual: <Instance of 'Future<int>'>
+     Which: emitted <1>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/data/audit_regression_test.dart 39:11         main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                         _CustomZone.registerUnaryCallback
+  test/data/audit_regression_test.dart 37:16         main.<fn>
+  
+00:00 +0 -2: ficha desativada não inicia treino
+00:00 +0 -3: ficha desativada não inicia treino [E]
+  Expected: throws <Instance of 'StateError'>
+    Actual: <Instance of 'Future<int>'>
+     Which: emitted <1>
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/data/audit_regression_test.dart 47:11         main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                         _CustomZone.registerUnaryCallback
+  test/data/audit_regression_test.dart 46:5          main.<fn>
+  
+00:00 +0 -3: rascunho obsoleto não apaga séries após remoção concorrente
+00:00 +0 -4: rascunho obsoleto não apaga séries após remoção concorrente [E]
+  Expected: throws <Instance of 'StateError'>
+    Actual: <Instance of 'Future<int>'>
+     Which: threw SqliteException:<SqliteException(787): while executing statement, FOREIGN KEY constraint failed, constraint failed (code 787)
+                    Causing statement: INSERT INTO "workout_plan_sets" ("plan_exercise_id", "position", "repetitions", "weight_kg", "notes") VALUES (?, ?, ?, ?, ?), parameters: 1, 0, 12, 30.0, null>
+            stack package:sqlite3/src/implementation/exception.dart 101:3                              throwException
+                  package:sqlite3/src/implementation/statement.dart 52:5                               StatementImplementation.throwStatementException
+                  package:sqlite3/src/implementation/statement.dart 100:7                              StatementImplementation._execute
+                  package:sqlite3/src/implementation/statement.dart 305:5                              StatementImplementation.executeWith
+                  package:sqlite3/src/statement.dart 94:12                                             CommonPreparedStatement.execute
+                  package:drift/src/sqlite3/database.dart 137:14                                       Sqlite3Delegate.runBatchSync
+                  package:drift/native.dart 429:30                                                     _NativeDelegate.runBatched.<fn>
+                  dart:async                                                                           new Future.sync
+                  package:drift/native.dart 429:19                                                     _NativeDelegate.runBatched
+                  package:drift/src/runtime/executor/helpers/engines.dart 133:19                       _BaseExecutor.runBatched.<fn>
+                  package:drift/src/runtime/executor/helpers/engines.dart 64:20                        _BaseExecutor._synchronized
+                  package:drift/src/runtime/executor/helpers/engines.dart 126:12                       _BaseExecutor.runBatched
+                  package:drift/src/runtime/api/batch.dart 263:21                                      Batch._runWith
+                  package:drift/src/runtime/api/batch.dart 256:13                                      Batch._commit
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           new Future.sync
+                  package:drift/native.dart 429:19                                                     _NativeDelegate.runBatched
+                  package:drift/src/runtime/executor/helpers/engines.dart 133:19                       _BaseExecutor.runBatched.<fn>
+                  package:drift/src/runtime/executor/helpers/engines.dart 64:20                        _BaseExecutor._synchronized
+                  package:drift/src/runtime/executor/helpers/engines.dart 126:12                       _BaseExecutor.runBatched
+                  package:drift/src/runtime/api/batch.dart 263:21                                      Batch._runWith
+                  package:drift/src/runtime/api/batch.dart 256:13                                      Batch._commit
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           _CustomZone.registerUnaryCallback
+                  package:drift/src/runtime/api/batch.dart 239:5                                       Batch._commit
+                  package:drift/src/runtime/api/connection_user.dart 633:20                            DatabaseConnectionUser.batch
+                  package:minha_ficha/features/workout_plans/data/workout_plan_repository.dart 214:15  WorkoutPlanRepository._replaceSets
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           _CustomZone.registerUnaryCallback
+                  package:minha_ficha/features/workout_plans/data/workout_plan_repository.dart 211:5   WorkoutPlanRepository._replaceSets
+                  package:minha_ficha/features/workout_plans/data/workout_plan_repository.dart 205:13  WorkoutPlanRepository.savePlan.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           _CustomZone.registerUnaryCallback
+                  package:minha_ficha/features/workout_plans/data/workout_plan_repository.dart 167:7   WorkoutPlanRepository.savePlan.<fn>
+                  package:drift/src/runtime/api/connection_user.dart 519:38                            DatabaseConnectionUser.transaction.<fn>.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           _CustomZone.registerUnaryCallback
+                  package:drift/src/runtime/api/connection_user.dart 517:9                             DatabaseConnectionUser.transaction.<fn>.<fn>
+                  dart:async                                                                           runZoned
+                  package:drift/src/runtime/api/connection_user.dart 661:12                            DatabaseConnectionUser._runConnectionZoned
+                  package:drift/src/runtime/api/connection_user.dart 514:14                            DatabaseConnectionUser.transaction.<fn>
+                  package:drift/src/runtime/api/connection_user.dart 172:16                            DatabaseConnectionUser.doWhenOpened.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           Future.then
+                  package:drift/src/runtime/api/connection_user.dart 170:50                            DatabaseConnectionUser.doWhenOpened
+                  package:drift/src/runtime/api/connection_user.dart 510:27                            DatabaseConnectionUser.transaction
+                  package:minha_ficha/features/workout_plans/data/workout_plan_repository.dart 140:48  WorkoutPlanRepository.savePlan
+                  test/data/audit_regression_test.dart 56:29                                           main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                                                           _CustomZone.registerUnaryCallback
+                  test/data/audit_regression_test.dart 52:20                                           main.<fn>
+                  
+            which is not an instance of 'StateError'
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/data/audit_regression_test.dart 56:11         main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                         _CustomZone.registerUnaryCallback
+  test/data/audit_regression_test.dart 52:20         main.<fn>
+  
+00:00 +0 -4: atualização da ficha ignora séries não executadas
+00:00 +0 -5: atualização da ficha ignora séries não executadas [E]
+  Expected: [32.5]
+    Actual: MappedListIterable<PlanSetDraft, double>:[32.5, 35.0, 999.0]
+     Which: at location [1] is MappedListIterable<PlanSetDraft, double>:[32.5, 35.0, 999.0] which longer than expected
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/data/audit_regression_test.dart 67:5           main.<fn>
+  
+00:00 +0 -5: usar último treino mantém alinhamento de séries já concluídas
+00:00 +0 -6: usar último treino mantém alinhamento de séries já concluídas [E]
+  Expected: [30, 35, 42.5]
+    Actual: MappedListIterable<WorkoutSessionSet, double>:[30.0, 30.0, 35.0]
+     Which: at location [1] is <30.0> instead of <35>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/data/audit_regression_test.dart 79:5           main.<fn>
+  
+00:00 +0 -6: sessão em andamento não gera recorde definitivo
+00:00 +1 -6: Some tests failed.
+
+Failing tests:
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/audit_regression_test.dart: atualização da ficha ignora séries não executadas
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/audit_regression_test.dart: ficha desativada não inicia treino
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/audit_regression_test.dart: rascunho obsoleto não apaga séries após remoção concorrente
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/audit_regression_test.dart: sessão encerrada rejeita alteração de série e mantém histórico
+  ... and 2 more

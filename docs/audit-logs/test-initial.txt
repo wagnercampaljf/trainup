@@ -1,0 +1,903 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+11 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart
+00:00 +0: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: (setUpAll)
+00:00 +0: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: parseDecimal aceita vírgula e ponto
+00:00 +1: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: parseDecimal retorna null para vazio ou inválido
+00:00 +2: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: volume série = peso × repetições
+00:00 +3: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR decimal com vírgula e milhar com ponto
+00:00 +4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: volume soma das séries
+00:00 +5: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR datas dd/MM/yyyy
+00:00 +6: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR datas dd/MM/yyyy
+00:00 +7: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR datas dd/MM/yyyy
+00:00 +8: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR datas dd/MM/yyyy
+00:00 +9: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: duração nunca negativa
+00:00 +10: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: duração nunca negativa
+00:00 +11: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR sinal explícito
+00:00 +12: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: métricas do exercício valores por treino
+00:00 +13: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: normalizeName remove acentos, caixa e espaços
+00:00 +14: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: métricas do exercício série cronológica independe da ordem de entrada
+00:00 +15: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: (tearDownAll)
+00:00 +15: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: métricas do exercício estatísticas (lista do mais recente ao mais antigo)
+00:00 +16: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: obrigatório
+00:00 +17: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: e-mail
+00:00 +18: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: altura e peso corporal plausíveis
+00:00 +19: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: gordura entre 0 e 100 e opcional
+00:00 +20: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: repetições e carga ≥ 0
+00:00 +21: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:00 +21 -1: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:00 +21 -1: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: restaura após o app ser fechado e reaberto
+00:00 +21 -2: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: restaura após o app ser fechado e reaberto [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:00 +21 -2: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: se acabou enquanto fechado, abre como concluído
+00:00 +21 -3: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: se acabou enquanto fechado, abre como concluído [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:00 +21 -3: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: pausar, continuar e resetar
+00:00 +21 -4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: pausar, continuar e resetar [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:00 +21 -4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_snapshot_test.dart: restante é calculado pelo relógio
+00:00 +22 -4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_snapshot_test.dart: pausar congela e continuar retoma de onde parou
+00:00 +23 -4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_snapshot_test.dart: adicionar e reduzir tempo
+00:00 +24 -4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_snapshot_test.dart: ajuste em timer parado altera a duração com limites
+00:00 +25 -4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_snapshot_test.dart: concluído e reset
+00:01 +26 -4: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: (setUpAll)
+00:01 +26 -4: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:01 +26 -5: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:01 +26 -5: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_plan_repository_test.dart: salva ficha com séries diferentes por série [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -5: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:01 +27 -6: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:01 +27 -6: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_plan_repository_test.dart: edita, reordena e mantém id do exercício existente [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -7: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:01 +27 -7: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_plan_repository_test.dart: exclusão é lógica [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -8: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     SimpleSelectStatement._mapResponse (package:drift/src/runtime/query_builder/statements/select/select.dart:90:3)
+<asynchronous suspension>
+#15     Selectable.getSingleOrNull (package:drift/src/runtime/query_builder/statements/query.dart:249:18)
+<asynchronous suspension>
+#16     SettingsRepository.load (package:minha_ficha/features/settings/data/settings_repository.dart:14:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#18     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart:47:22)
+<asynchronous suspension>
+#19     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#20     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following _TypeError was thrown running a test:
+Null check operator used on a null value
+
+When the exception was thrown, this was the stack:
+#0      main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart:57:61)
+<asynchronous suspension>
+#1      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#2      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  fluxo completo: perfil, ficha, treino, timer e histórico
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (2) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +27 -9: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:01 +27 -9: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico [E]
+  Test failed. See exception logs above.
+  The test description was: fluxo completo: perfil, ficha, treino, timer e histórico
+  
+00:01 +27 -9: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: sessão é snapshot independente da ficha [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -10: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:01 +27 -10: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: não permite dois treinos em andamento [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -11: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:01 +27 -11: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: série concluída é salva imediatamente [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -12: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:01 +27 -12: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: adicionar/remover séries e pular afeta só a sessão [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -13: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:01 +27 -13: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: fluxo do MVP: histórico, último treino e evolução 40 → 42,5 [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -14: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:01 +27 -14: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: renomear exercício não altera histórico [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:01 +27 -15: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:02 +27 -15: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: cancelar remove do histórico; finalizar calcula duração [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +27 -16: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:02 +27 -16: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: atualizar ficha a partir do treino é opcional e explícito [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +27 -17: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+00:02 +27 -17: /home/wagner/Documentos/projetos/minha-ficha/test/data/workout_session_repository_test.dart: exercício adicionado durante o treino sugere última carga [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +27 -17: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     DatabaseConnectionUser.transaction (package:drift/src/runtime/api/connection_user.dart:510:12)
+<asynchronous suspension>
+<asynchronous suspension>
+#16     main.seed (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:64:5)
+<asynchronous suspension>
+#17     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:79:16)
+<asynchronous suspension>
+#18     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#19     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     SimpleSelectStatement._mapResponse (package:drift/src/runtime/query_builder/statements/select/select.dart:90:3)
+<asynchronous suspension>
+#15     Selectable.getSingle (package:drift/src/runtime/query_builder/statements/query.dart:239:13)
+<asynchronous suspension>
+#16     createFichaA (file:///home/wagner/Documentos/projetos/minha-ficha/test/helpers/fixtures.dart:10:18)
+<asynchronous suspension>
+#17     main.<anonymous closure>.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:81:22)
+<asynchronous suspension>
+<asynchronous suspension>
+#19     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:80:5)
+<asynchronous suspension>
+#20     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#21     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     SimpleSelectStatement._mapResponse (package:drift/src/runtime/query_builder/statements/select/select.dart:90:3)
+<asynchronous suspension>
+#15     Selectable.getSingleOrNull (package:drift/src/runtime/query_builder/statements/query.dart:249:18)
+<asynchronous suspension>
+#16     SettingsRepository.load (package:minha_ficha/features/settings/data/settings_repository.dart:14:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#18     openApp (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:35:20)
+<asynchronous suspension>
+#19     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:88:5)
+<asynchronous suspension>
+#20     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#21     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following _TypeError was thrown running a test:
+Null check operator used on a null value
+
+When the exception was thrown, this was the stack:
+#0      openApp (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:44:59)
+<asynchronous suspension>
+#1      main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:88:5)
+<asynchronous suspension>
+#2      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  treino em andamento é oferecido ao reabrir o app
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (4) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +27 -18: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: treino em andamento é oferecido ao reabrir o app [E]
+  Test failed. See exception logs above.
+  The test description was: treino em andamento é oferecido ao reabrir o app
+  
+00:02 +27 -18: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: evolução de carga 40 → 42,5 kg e evolução corporal
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     DatabaseConnectionUser.transaction (package:drift/src/runtime/api/connection_user.dart:510:12)
+<asynchronous suspension>
+<asynchronous suspension>
+#16     main.seed (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:64:5)
+<asynchronous suspension>
+#17     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:101:16)
+<asynchronous suspension>
+#18     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#19     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     SimpleSelectStatement._mapResponse (package:drift/src/runtime/query_builder/statements/select/select.dart:90:3)
+<asynchronous suspension>
+#15     Selectable.getSingle (package:drift/src/runtime/query_builder/statements/query.dart:239:13)
+<asynchronous suspension>
+#16     createFichaA (file:///home/wagner/Documentos/projetos/minha-ficha/test/helpers/fixtures.dart:10:18)
+<asynchronous suspension>
+#17     main.<anonymous closure>.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:103:22)
+<asynchronous suspension>
+<asynchronous suspension>
+#19     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:102:5)
+<asynchronous suspension>
+#20     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#21     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following ArgumentError was thrown while running async test code:
+Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in
+'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to
+load dynamic library
+'/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so':
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by
+/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+
+When the exception was thrown, this was the stack:
+#0      Native._ffi_resolver.#ffiClosure0 (dart:ffi-patch/ffi_patch.dart)
+#1      Native._ffi_resolver_function (dart:ffi-patch/ffi_patch.dart:1959:20)
+#2      sqlite3_initialize (package:sqlite3/src/ffi/libsqlite3.g.dart)
+#3      FfiBindings.sqlite3_initialize (package:sqlite3/src/ffi/bindings.dart:202:23)
+#4      Sqlite3Implementation.initialize (package:sqlite3/src/implementation/sqlite3.dart:32:25)
+#5      Sqlite3Implementation.open (package:sqlite3/src/implementation/sqlite3.dart:49:5)
+#6      FfiSqlite3.open (package:sqlite3/src/ffi/implementation.dart:29:18)
+#7      Sqlite3Implementation.openInMemory (package:sqlite3/src/implementation/sqlite3.dart:100:12)
+#8      FfiSqlite3.openInMemory (package:sqlite3/src/ffi/implementation.dart:35:18)
+#9      _NativeDelegate.openDatabase (package:drift/native.dart:421:20)
+<asynchronous suspension>
+#10     Sqlite3Delegate.open (package:drift/src/sqlite3/database.dart:85:19)
+<asynchronous suspension>
+#11     DelegatedDatabase.ensureOpen.<anonymous closure> (package:drift/src/runtime/executor/helpers/engines.dart:515:7)
+<asynchronous suspension>
+<asynchronous suspension>
+#13     DatabaseConnectionUser.doWhenOpened.<anonymous closure> (package:drift/src/runtime/api/connection_user.dart:170:55)
+<asynchronous suspension>
+#14     SimpleSelectStatement._mapResponse (package:drift/src/runtime/query_builder/statements/select/select.dart:90:3)
+<asynchronous suspension>
+#15     Selectable.getSingleOrNull (package:drift/src/runtime/query_builder/statements/query.dart:249:18)
+<asynchronous suspension>
+#16     SettingsRepository.load (package:minha_ficha/features/settings/data/settings_repository.dart:14:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#18     openApp (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:35:20)
+<asynchronous suspension>
+#19     main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:131:23)
+<asynchronous suspension>
+#20     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#21     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following _TypeError was thrown running a test:
+Null check operator used on a null value
+
+When the exception was thrown, this was the stack:
+#0      openApp (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:44:59)
+<asynchronous suspension>
+#1      main.<anonymous closure> (file:///home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart:131:23)
+<asynchronous suspension>
+#2      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  evolução de carga 40 → 42,5 kg e evolução corporal
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (4) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +27 -19: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: evolução de carga 40 → 42,5 kg e evolução corporal [E]
+  Test failed. See exception logs above.
+  The test description was: evolução de carga 40 → 42,5 kg e evolução corporal
+  
+00:02 +27 -19: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: (tearDownAll)
+00:02 +27 -19: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: onboarding cria perfil e medição inicial
+00:02 +27 -20: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: cria exercício personalizado
+00:02 +27 -21: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: onboarding cria perfil e medição inicial [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +27 -21: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: perfil rejeita altura implausível
+00:02 +28 -21: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: novas medições geram histórico (não sobrescrevem)
+00:02 +28 -21: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: cria exercício personalizado [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +28 -22: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: novas medições geram histórico (não sobrescrevem)
+00:02 +28 -23: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: bloqueia duplicado por nome normalizado [E]
+  Expected: throws <Instance of 'DuplicateExerciseException'>
+    Actual: <Closure: () => Future<int>>
+     Which: threw ArgumentError:<Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+                  >
+            stack dart:ffi                                                Native._ffi_resolver_function
+                  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+                  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+                  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+                  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+                  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+                  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+                  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+                  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+                  ===== asynchronous gap ===========================
+                  package:matcher                                         expect
+                  package:flutter_test/src/widget_tester.dart 473:18      expect
+                  test/data/exercise_repository_test.dart 32:5            main.<fn>
+                  
+            which is not an instance of 'DuplicateExerciseException'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/data/exercise_repository_test.dart 32:5        main.<fn>
+  
+00:02 +28 -23: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: renomear para nome existente é bloqueado
+00:02 +28 -23: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: novas medições geram histórico (não sobrescrevem) [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +28 -24: /home/wagner/Documentos/projetos/minha-ficha/test/data/profile_measurement_repository_test.dart: peso é obrigatório e gordura limitada a 0..100
+00:02 +29 -24: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: renomear para nome existente é bloqueado [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +29 -24: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: busca e filtro por grupo
+00:02 +29 -25: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: busca e filtro por grupo [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                       Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart                      sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23                   FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25          Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5           Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18              FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12         Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18              FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                               _NativeDelegate.openDatabase
+  ===== asynchronous gap ===========================
+  dart:async                                                     _StreamController.addError
+  package:drift/src/runtime/executor/stream_queries.dart 355:31  QueryStream.fetchAndEmitData
+  ===== asynchronous gap ===========================
+  dart:async                                                     _CustomZone.registerBinaryCallback
+  package:drift/src/runtime/executor/stream_queries.dart 338:9   QueryStream.fetchAndEmitData
+  package:drift/src/runtime/executor/stream_queries.dart 269:7   QueryStream._onListenOrResume
+  package:drift/src/runtime/executor/stream_queries.dart 222:5   QueryStream._stream.<fn>
+  dart:async                                                     _MultiStream.listen
+  package:drift/src/utils/async_map.dart 29:22                   AsyncMapPerSubscription.asyncMapPerSubscription.<fn>
+  dart:async                                                     Stream.first
+  test/data/exercise_repository_test.dart 54:10                  main.<fn>
+  
+00:02 +29 -25: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: exercício sem uso é apagado; com histórico é desativado
+00:02 +29 -26: /home/wagner/Documentos/projetos/minha-ficha/test/data/exercise_repository_test.dart: exercício sem uso é apagado; com histórico é desativado [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +29 -26: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: cria schema com seed de exercícios, settings e timer
+00:02 +29 -27: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: cria schema com seed de exercícios, settings e timer [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +29 -27: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: foreign keys estão ativas
+00:02 +29 -28: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: foreign keys estão ativas [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Instance of 'Future<int>'>
+     Which: threw ArgumentError:<Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+                  >
+            stack dart:ffi                                                Native._ffi_resolver_function
+                  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+                  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+                  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+                  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+                  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+                  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+                  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+                  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+                  ===== asynchronous gap ===========================
+                  package:matcher                                         expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+                  test/data/database_test.dart 33:11                      main.<fn>
+                  
+            which is not an instance of 'Exception'
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/data/database_test.dart 33:11                 main.<fn>
+  
+00:02 +29 -28: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: constraints rejeitam valores inválidos
+00:02 +29 -29: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: constraints rejeitam valores inválidos [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Instance of 'Future<int>'>
+     Which: threw ArgumentError:<Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+                  >
+            stack dart:ffi                                                Native._ffi_resolver_function
+                  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+                  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+                  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+                  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+                  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+                  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+                  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+                  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+                  ===== asynchronous gap ===========================
+                  package:matcher                                         expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+                  test/data/database_test.dart 46:11                      main.<fn>
+                  
+            which is not an instance of 'Exception'
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/data/database_test.dart 46:11                 main.<fn>
+  
+00:02 +29 -29: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: excluir ficha mantém sessão com snapshot
+00:02 +29 -30: /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: excluir ficha mantém sessão com snapshot [E]
+  Invalid argument(s): Couldn't resolve native function 'sqlite3_initialize' in 'package:sqlite3/src/ffi/libsqlite3.g.dart' : Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': Failed to load dynamic library '/home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so': /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /home/wagner/Documentos/projetos/minha-ficha/build/native_assets/linux/libsqlite3.so).
+  
+  dart:ffi                                                Native._ffi_resolver_function
+  package:sqlite3/src/ffi/libsqlite3.g.dart               sqlite3_initialize
+  package:sqlite3/src/ffi/bindings.dart 202:23            FfiBindings.sqlite3_initialize
+  package:sqlite3/src/implementation/sqlite3.dart 32:25   Sqlite3Implementation.initialize
+  package:sqlite3/src/implementation/sqlite3.dart 49:5    Sqlite3Implementation.open
+  package:sqlite3/src/ffi/implementation.dart 29:18       FfiSqlite3.open
+  package:sqlite3/src/implementation/sqlite3.dart 100:12  Sqlite3Implementation.openInMemory
+  package:sqlite3/src/ffi/implementation.dart 35:18       FfiSqlite3.openInMemory
+  package:drift/native.dart 421:20                        _NativeDelegate.openDatabase
+  
+00:02 +29 -30: Some tests failed.
+
+Failing tests:
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: constraints rejeitam valores inválidos
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: cria schema com seed de exercícios, settings e timer
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: excluir ficha mantém sessão com snapshot
+  /home/wagner/Documentos/projetos/minha-ficha/test/data/database_test.dart: foreign keys estão ativas
+  ... and 26 more

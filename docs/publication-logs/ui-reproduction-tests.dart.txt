@@ -1,0 +1,65 @@
+import 'dart:async';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:minha_ficha/core/database/app_database.dart';
+import 'package:minha_ficha/features/body_measurements/data/body_measurement_repository.dart';
+import 'package:minha_ficha/features/body_measurements/domain/body_metric.dart';
+import 'package:minha_ficha/features/body_measurements/presentation/measurement_form_screen.dart';
+import 'package:minha_ficha/features/workouts/presentation/widgets/set_row.dart';
+
+import 'helpers/test_database.dart';
+
+class _DelayedMeasurements extends BodyMeasurementRepository {
+  _DelayedMeasurements(super.db);
+  int calls = 0;
+  final saved = Completer<int>();
+  @override
+  Future<int> create(BodyMeasurementInput input) {
+    calls++;
+    return saved.future;
+  }
+}
+
+void main() {
+  setUpAll(() => initializeDateFormatting('pt_BR'));
+  testWidgets('PUBLICAÇÃO P07: dois acionamentos de SALVAR devem inserir uma medição', (tester) async {
+    final db = createTestDatabase();
+    final repo = _DelayedMeasurements(db);
+    addTearDown(() async {
+      await tester.pumpWidget(const SizedBox.shrink());
+      repo.saved.complete(1);
+      await tester.pump();
+      await tester.runAsync(db.close);
+    });
+    await tester.pumpWidget(ProviderScope(overrides: [bodyMeasurementRepositoryProvider.overrideWithValue(repo)], child: const MaterialApp(home: MeasurementFormScreen())));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('metric_weight')), '95');
+    await tester.ensureVisible(find.byKey(const Key('measurement_save')));
+    final button = tester.widget<FilledButton>(find.byKey(const Key('measurement_save')));
+    button.onPressed!();
+    button.onPressed!();
+    expect(repo.calls, 1);
+  });
+
+  testWidgets('PUBLICAÇÃO P08: swipe com exclusão pendente deve manter árvore válida', (tester) async {
+    addTearDown(() => tester.pumpWidget(const SizedBox.shrink()));
+    late StateSetter rebuild;
+    await tester.pumpWidget(MaterialApp(home: StatefulBuilder(builder: (context, setState) {
+      rebuild = setState;
+      return Scaffold(body: SetRow(
+      set: const WorkoutSessionSet(id: 1, sessionExerciseId: 1, position: 0, repetitions: 10, weightKg: 30, completed: false),
+      index: 0, weightIncrement: 2.5, isNext: true,
+      onWeightChanged: (_) {}, onRepsChanged: (_) {}, onToggle: (_, _) {},
+      onRemove: () {}, // Representa uma operação SQLite ainda pendente.
+    ));
+    })));
+    await tester.drag(find.byType(Dismissible), const Offset(-700, 0));
+    await tester.pumpAndSettle();
+    rebuild(() {});
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+}

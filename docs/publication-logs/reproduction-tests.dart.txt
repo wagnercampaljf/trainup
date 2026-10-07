@@ -1,0 +1,37 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:minha_ficha/core/database/app_database.dart';
+import 'package:minha_ficha/features/workout_plans/data/workout_plan_repository.dart';
+import 'package:minha_ficha/features/workouts/data/workout_session_repository.dart';
+
+import 'helpers/fixtures.dart';
+import 'helpers/test_database.dart';
+
+void main() {
+  late AppDatabase db;
+  late WorkoutPlanRepository plans;
+  late WorkoutSessionRepository sessions;
+  late int planId;
+  setUp(() async {
+    db = createTestDatabase();
+    plans = WorkoutPlanRepository(db);
+    sessions = WorkoutSessionRepository(db);
+    planId = await createFichaA(db);
+  });
+  tearDown(() => db.close());
+
+  test('PUBLICAÇÃO P05: série concluída deve rejeitar zero repetições', () async {
+    final id = await sessions.startFromPlan(planId);
+    final set = (await sessions.getSession(id))!.exercises.single.sets.first;
+    await sessions.completeSet(set.id, repetitions: 12, weightKg: 30);
+    await expectLater(sessions.updateSet(set.id, repetitions: 0), throwsArgumentError);
+  });
+
+  test('PUBLICAÇÃO P06: encerrar treino com ficha excluída não deve lançar erro na atualização opcional', () async {
+    final id = await sessions.startFromPlan(planId);
+    final set = (await sessions.getSession(id))!.exercises.single.sets.first;
+    await sessions.completeSet(set.id, repetitions: 12, weightKg: 30);
+    await plans.deletePlan(planId);
+    await sessions.finishSession(id);
+    await expectLater(plans.updatePlanFromSession(id), completes);
+  });
+}

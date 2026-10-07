@@ -1,0 +1,144 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  sqlite3 3.5.2 (3.7.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+11 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart
+00:00 +0: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: (setUpAll)
+00:00 +0: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: parseDecimal aceita vírgula e ponto
+00:00 +1: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: parseDecimal retorna null para vazio ou inválido
+00:00 +2: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR decimal com vírgula e milhar com ponto
+00:00 +3: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR datas dd/MM/yyyy
+00:00 +4: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR durações
+00:00 +5: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: formatação pt-BR sinal explícito
+00:00 +6: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: normalizeName remove acentos, caixa e espaços
+00:00 +7: /home/wagner/Documentos/projetos/minha-ficha/test/unit/formatters_test.dart: (tearDownAll)
+00:00 +7: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto sobre botão primário ≥ 4,5:1
+00:00 +8: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark link/botão de texto primário ≥ 4,5:1
+00:00 +9: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto em container primário ≥ 4,5:1
+00:00 +10: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto sobre verde (descanso concluído) ≥ 4,5:1
+00:01 +11: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto em container verde (recorde) ≥ 4,5:1
+00:01 +12: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto em série concluída ≥ 4,5:1
+00:01 +13: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto principal ≥ 4,5:1
+00:01 +14: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto secundário em card ≥ 4,5:1
+00:01 +15: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark erro sobre fundo ≥ 4,5:1
+00:01 +16: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark texto sobre erro (excluir) ≥ 4,5:1
+00:01 +17: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark chips/indicador ≥ 4,5:1
+00:01 +18: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark linha do gráfico / borda da próxima série ≥ 3:1
+00:01 +19: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark botão de série concluída / barra de progresso ≥ 3:1
+00:01 +20: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema dark contorno do botão de série pendente ≥ 3:1
+00:01 +21: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto sobre botão primário ≥ 4,5:1
+00:01 +22: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light link/botão de texto primário ≥ 4,5:1
+00:01 +23: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto em container primário ≥ 4,5:1
+00:01 +24: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto sobre verde (descanso concluído) ≥ 4,5:1
+00:01 +25: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto em container verde (recorde) ≥ 4,5:1
+00:01 +26: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto em série concluída ≥ 4,5:1
+00:01 +27: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto principal ≥ 4,5:1
+00:01 +28: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto secundário em card ≥ 4,5:1
+00:01 +29: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light erro sobre fundo ≥ 4,5:1
+00:01 +30: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light texto sobre erro (excluir) ≥ 4,5:1
+00:01 +31: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light chips/indicador ≥ 4,5:1
+00:01 +32: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light linha do gráfico / borda da próxima série ≥ 3:1
+00:01 +33: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light botão de série concluída / barra de progresso ≥ 3:1
+00:01 +34: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: tema light contorno do botão de série pendente ≥ 3:1
+00:01 +35: /home/wagner/Documentos/projetos/minha-ficha/test/unit/theme_contrast_test.dart: papéis com significado fixo
+00:01 +36: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: cenários obrigatórios: 620 kg, +25%, máximo 45 kg
+00:01 +37: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: volume série = peso × repetições
+00:01 +38: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: volume soma das séries
+00:01 +39: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: evolução percentual ((atual - inicial) / inicial) × 100
+00:01 +40: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: evolução percentual divisão por zero retorna null
+00:01 +41: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: evolução percentual resumo da série
+00:01 +42: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: duração nunca negativa
+00:01 +43: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: métricas do exercício valores por treino
+00:01 +44: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: métricas do exercício série cronológica independe da ordem de entrada
+00:01 +45: /home/wagner/Documentos/projetos/minha-ficha/test/unit/calculations_test.dart: métricas do exercício estatísticas (lista do mais recente ao mais antigo)
+00:01 +46: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: obrigatório
+00:01 +47: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: e-mail
+00:01 +48: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: altura e peso corporal plausíveis
+00:01 +49: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: gordura entre 0 e 100 e opcional
+00:01 +50: /home/wagner/Documentos/projetos/minha-ficha/test/unit/validators_test.dart: repetições e carga ≥ 0
+00:02 +51: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:02 +52: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:02 +53: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:02 +54: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:02 +55: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:02 +56: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: estado é único e global; conclui e vibra ao chegar a zero
+00:02 +57: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: restaura após o app ser fechado e reaberto
+00:02 +58: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: se acabou enquanto fechado, abre como concluído
+00:02 +59: /home/wagner/Documentos/projetos/minha-ficha/test/unit/timer_controller_test.dart: pausar, continuar e resetar
+00:03 +60: /home/wagner/Documentos/projetos/minha-ficha/test/widget/timer_notice_test.dart: aviso aparece ao terminar e minimiza sozinho
+00:04 +61: /home/wagner/Documentos/projetos/minha-ficha/test/widget/chart_audit_test.dart: gráfico 0 registros em tema claro
+00:04 +62: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +63: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +64: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +65: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +66: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +67: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +68: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +69: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +70: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:05 +71: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:06 +72: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:06 +73: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:06 +74: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +75: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +76: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +77: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +78: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +79: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +80: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +81: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:07 +82: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +83: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +84: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +85: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +86: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +87: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +88: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +89: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +90: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:08 +91: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +92: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +93: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +94: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +95: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +96: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +97: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +98: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +99: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:10 +100: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:11 +101: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:12 +102: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +103: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +104: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +105: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +106: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +107: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +108: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:13 +109: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +110: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +111: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +112: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +113: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +114: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +115: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +116: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +117: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:14 +118: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:15 +119: /home/wagner/Documentos/projetos/minha-ficha/test/widget/app_flow_test.dart: fluxo completo: perfil, ficha, treino, timer e histórico
+00:16 +120: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: edição de ficha salva e volta sem pedir descarte
+00:16 +121: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: salvar ficha sem alterações também fecha o editor
+00:17 +122: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: timer global preserva contagem entre abas e perfil
+00:18 +123: /home/wagner/Documentos/projetos/minha-ficha/test/widget/restore_and_progress_test.dart: (tearDownAll)
+00:18 +123: All tests passed!

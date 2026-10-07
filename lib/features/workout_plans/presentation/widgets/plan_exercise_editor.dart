@@ -1,0 +1,232 @@
+import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
+
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/utils/formatters.dart';
+import '../../../../core/utils/validators.dart';
+import '../../domain/plan_models.dart';
+
+/// Editor de um exercício da ficha: descanso, observação e séries.
+class PlanExerciseEditor extends StatelessWidget {
+  const PlanExerciseEditor({
+    required this.exercise,
+    required this.index,
+    required this.onChanged,
+    required this.onRemove,
+    super.key,
+  });
+
+  final PlanExerciseDraft exercise;
+  final int index;
+  final VoidCallback onChanged;
+  final VoidCallback onRemove;
+
+  static const restOptions = [30, 45, 60, 90, 120, 150, 180, 240, 300];
+
+  void _addSet() {
+    final last = exercise.sets.lastOrNull;
+    exercise.sets.add(
+      last?.copy() ?? PlanSetDraft(repetitions: 10, weightKg: 0),
+    );
+    onChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 8, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                ReorderableDragStartListener(
+                  index: index,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(
+                      Icons.drag_indicator,
+                      semanticLabel: 'Arrastar',
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${index + 1}. ${exercise.exerciseName}',
+                        style: context.text.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        exercise.muscleGroup.label,
+                        style: context.text.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'Remover ${exercise.exerciseName}',
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: onRemove,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<int?>(
+              isExpanded: true,
+              initialValue: exercise.restSeconds,
+              decoration: const InputDecoration(
+                labelText: 'Descanso',
+                isDense: true,
+              ),
+              items: [
+                const DropdownMenuItem(child: Text('Padrão das configurações')),
+                for (final s in {...restOptions, ?exercise.restSeconds})
+                  DropdownMenuItem(
+                    value: s,
+                    child: Text(formatRest(Duration(seconds: s))),
+                  ),
+              ],
+              onChanged: (value) {
+                exercise.restSeconds = value;
+                onChanged();
+              },
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              initialValue: exercise.notes,
+              decoration: const InputDecoration(
+                labelText: 'Observação (opcional)',
+                isDense: true,
+              ),
+              onChanged: (value) {
+                exercise.notes = value;
+                onChanged();
+              },
+            ),
+            const SizedBox(height: 12),
+            for (final (setIndex, set) in exercise.sets.indexed)
+              _PlanSetRow(
+                key: ObjectKey(set),
+                index: setIndex,
+                set: set,
+                onDuplicate: () {
+                  exercise.sets.insert(setIndex + 1, set.copy());
+                  onChanged();
+                },
+                onRemove: () {
+                  exercise.sets.removeAt(setIndex);
+                  onChanged();
+                },
+                onChanged: onChanged,
+              ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                key: Key('add_set_${exercise.exerciseId}'),
+                onPressed: _addSet,
+                icon: const Icon(Icons.add),
+                label: const Text('Adicionar série'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+final _intInput = FilteringTextInputFormatter.digitsOnly;
+final _decimalInput = FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'));
+
+class _PlanSetRow extends StatelessWidget {
+  const _PlanSetRow({
+    required this.index,
+    required this.set,
+    required this.onDuplicate,
+    required this.onRemove,
+    required this.onChanged,
+    super.key,
+  });
+
+  final int index;
+  final PlanSetDraft set;
+  final VoidCallback onDuplicate;
+  final VoidCallback onRemove;
+  final VoidCallback onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 56,
+            height: 48,
+            child: Center(
+              child: Text(
+                'Série ${index + 1}',
+                style: context.text.labelMedium,
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextFormField(
+              key: Key('plan_set_reps_$index'),
+              initialValue: '${set.repetitions}',
+              keyboardType: TextInputType.number,
+              inputFormatters: [_intInput],
+              decoration: const InputDecoration(
+                labelText: 'Reps',
+                isDense: true,
+              ),
+              validator: Validators.repetitions,
+              onChanged: (value) {
+                final reps = int.tryParse(value);
+                if (reps != null && reps >= 0) set.repetitions = reps;
+                onChanged();
+              },
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextFormField(
+              key: Key('plan_set_weight_$index'),
+              initialValue: decimalToInput(set.weightKg),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [_decimalInput],
+              decoration: const InputDecoration(
+                labelText: 'Peso',
+                suffixText: 'kg',
+                isDense: true,
+              ),
+              validator: Validators.liftWeight,
+              onChanged: (value) {
+                final weight = parseDecimal(value);
+                if (weight != null && weight >= 0) set.weightKg = weight;
+                onChanged();
+              },
+            ),
+          ),
+          PopupMenuButton<String>(
+            tooltip: 'Opções da série ${index + 1}',
+            onSelected: (action) =>
+                action == 'duplicate' ? onDuplicate() : onRemove(),
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: 'duplicate', child: Text('Duplicar série')),
+              PopupMenuItem(value: 'remove', child: Text('Remover série')),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
