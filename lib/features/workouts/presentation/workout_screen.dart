@@ -363,9 +363,9 @@ class _FinishDialogState extends State<_FinishDialog> {
               onChanged: (v) => setState(() => _updatePlan = v ?? false),
               title: const Text('Atualizar a ficha'),
               subtitle: const Text(
-                'As séries concluídas hoje (cargas e repetições) passam a ser o '
-                'planejamento. Séries não concluídas saem da ficha; exercícios '
-                'sem séries concluídas não mudam.',
+                'As séries concluídas hoje (cargas e repetições) e o descanso '
+                'passam a ser o planejamento. Séries não concluídas saem da '
+                'ficha; exercícios sem séries concluídas não mudam.',
               ),
             ),
           ],

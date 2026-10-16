@@ -73,13 +73,18 @@ class TimerController extends Notifier<TimerUiState> {
   }
 
   /// Recalcula o restante (chamado pelo ticker e ao voltar do background).
-  void refresh() {
+  ///
+  /// [feedback] `false` quando o fim já foi avisado pelo sistema (aviso
+  /// agendado enquanto o app estava fora da tela).
+  void refresh({bool feedback = true}) {
     final snapshot = state.snapshot;
     final now = _now();
     if (snapshot.hasExpired(now)) {
       final endsAt = snapshot.endsAt;
       _set(snapshot.finish());
-      if (endsAt != null && now.difference(endsAt) <= _feedbackWindow) {
+      if (feedback &&
+          endsAt != null &&
+          now.difference(endsAt) <= _feedbackWindow) {
         final settings = ref.read(settingsProvider);
         unawaited(
           ref

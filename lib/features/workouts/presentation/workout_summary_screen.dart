@@ -8,6 +8,7 @@ import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/stat_tile.dart';
 import '../data/workout_session_repository.dart';
 import '../domain/session_models.dart';
+import 'share/share_workout_sheet.dart';
 
 /// Dados do resumo pós-treino.
 typedef WorkoutSummaryData = ({
@@ -93,10 +94,32 @@ class _WorkoutSummaryScreenState extends ConsumerState<WorkoutSummaryScreen> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: FilledButton(
-            key: const Key('summary_done'),
-            onPressed: _saving ? null : _done,
-            child: const Text('CONCLUIR'),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: const Key('summary_share'),
+                  onPressed: switch (summary.value) {
+                    final data? => () => showShareWorkoutSheet(
+                      context,
+                      detail: data.detail,
+                      records: data.records,
+                    ),
+                    null => null,
+                  },
+                  icon: const Icon(Icons.share),
+                  label: const Text('COMPARTILHAR'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton(
+                  key: const Key('summary_done'),
+                  onPressed: _saving ? null : _done,
+                  child: const Text('CONCLUIR'),
+                ),
+              ),
+            ],
           ),
         ),
       ),

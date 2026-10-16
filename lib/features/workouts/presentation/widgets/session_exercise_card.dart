@@ -6,6 +6,9 @@ import 'package:material_ui/material_ui.dart';
 import '../../../../core/database/app_database.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/utils/formatters.dart';
+import '../../../settings/presentation/settings_controller.dart';
+import '../../../timer/presentation/rest_picker.dart';
+import '../../../workout_plans/data/workout_plan_repository.dart';
 import '../../data/workout_session_repository.dart';
 import '../../domain/session_models.dart';
 import '../set_text.dart';
@@ -43,6 +46,10 @@ class SessionExerciseCard extends ConsumerWidget {
     final currentMax = detail.maxWeight;
     final isRecord =
         previousBest != null && currentMax != null && currentMax > previousBest;
+    final defaultRest = ref.watch(
+      settingsProvider.select((s) => s.defaultRestSeconds),
+    );
+    final rest = exercise.restSeconds ?? defaultRest;
 
     return Card(
       child: Padding(
@@ -68,9 +75,7 @@ class SessionExerciseCard extends ConsumerWidget {
                       Text(
                         [
                           exercise.muscleGroupSnapshot.label,
-                          if (exercise.restSeconds != null)
-                            'descanso '
-                                '${formatRest(Duration(seconds: exercise.restSeconds!))}',
+                          'descanso ${formatRest(Duration(seconds: rest))}',
                           if (exercise.skipped) 'pulado',
                           if (detail.isDone) 'concluído ✓',
                         ].join(' · '),
@@ -94,20 +99,26 @@ class SessionExerciseCard extends ConsumerWidget {
                   ),
                 PopupMenuButton<String>(
                   tooltip: 'Opções de ${exercise.exerciseNameSnapshot}',
-                  onSelected: (action) => _guard(
-                    context,
-                    () => switch (action) {
-                      'skip' => repo.setSkipped(
-                        exercise.id,
-                        skipped: !exercise.skipped,
-                      ),
-                      _ => repo.applyValuesToPendingSets(
-                        exercise.id,
-                        last.values.toList(),
-                      ),
-                    },
-                  ),
+                  onSelected: (action) => action == 'rest'
+                      ? _changeRest(context, ref, exercise, defaultRest)
+                      : _guard(
+                          context,
+                          () => switch (action) {
+                            'skip' => repo.setSkipped(
+                              exercise.id,
+                              skipped: !exercise.skipped,
+                            ),
+                            _ => repo.applyValuesToPendingSets(
+                              exercise.id,
+                              last.values.toList(),
+                            ),
+                          },
+                        ),
                   itemBuilder: (_) => [
+                    const PopupMenuItem(
+                      value: 'rest',
+                      child: Text('Alterar descanso'),
+                    ),
                     PopupMenuItem(
                       value: 'skip',
                       child: Text(
@@ -250,6 +261,43 @@ class SessionExerciseCard extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+/// Altera o descanso de um exercício do treino e, se pedido, na ficha.
+Future<void> _changeRest(
+  BuildContext context,
+  WidgetRef ref,
+  WorkoutSessionExercise exercise,
+  int defaultRest,
+) async {
+  final planExerciseId = exercise.planExerciseId;
+  final choice = await showRestPicker(
+    context,
+    exerciseName: exercise.exerciseNameSnapshot,
+    current: exercise.restSeconds,
+    defaultSeconds: defaultRest,
+    offerApplyToPlan: planExerciseId != null,
+  );
+  if (choice == null || !context.mounted) return;
+  try {
+    await ref
+        .read(workoutSessionRepositoryProvider)
+        .updateRest(exercise.id, choice.seconds);
+    if (choice.applyToPlan && planExerciseId != null) {
+      final saved = await ref
+          .read(workoutPlanRepositoryProvider)
+          .updateExerciseRest(planExerciseId, choice.seconds);
+      if (!saved && context.mounted) {
+        context.showMessage(
+          'Descanso alterado neste treino. A ficha não existe mais.',
+        );
+      }
+    }
+  } on Object catch (e) {
+    if (context.mounted) {
+      context.showMessage('Não foi possível alterar o descanso: $e');
+    }
   }
 }
 

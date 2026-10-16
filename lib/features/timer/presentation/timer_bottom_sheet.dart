@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/utils/formatters.dart';
+import 'rest_alarm_permission_notice.dart';
 import 'timer_controller.dart';
 
 /// Indica se os controles do timer estão abertos. Enquanto estiverem, o
@@ -190,6 +191,8 @@ class TimerBottomSheet extends ConsumerWidget {
               ),
             ],
           ),
+          const SizedBox(height: 8),
+          const RestAlarmPermissionNotice(),
         ],
       ),
     );

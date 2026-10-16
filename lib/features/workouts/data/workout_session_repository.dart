@@ -419,6 +419,21 @@ class WorkoutSessionRepository {
             .write(WorkoutSessionExercisesCompanion(skipped: Value(skipped)));
       });
 
+  /// Altera o descanso de um exercício do treino (`null` = padrão).
+  Future<void> updateRest(int sessionExerciseId, int? restSeconds) {
+    if (restSeconds != null && (restSeconds < 0 || restSeconds > 3600)) {
+      throw ArgumentError('Descanso deve estar entre 0 e 3600 segundos');
+    }
+    return _db.transaction(() async {
+      await _requireEditableExercise(sessionExerciseId);
+      await (_db.update(
+        _db.workoutSessionExercises,
+      )..where((e) => e.id.equals(sessionExerciseId))).write(
+        WorkoutSessionExercisesCompanion(restSeconds: Value(restSeconds)),
+      );
+    });
+  }
+
   /// Aplica as cargas/reps de [values] às séries pendentes, em ordem.
   Future<void> applyValuesToPendingSets(
     int sessionExerciseId,

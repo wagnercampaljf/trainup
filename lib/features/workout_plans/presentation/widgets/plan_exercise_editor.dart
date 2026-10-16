@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/utils/validators.dart';
+import '../../../timer/domain/rest_options.dart';
 import '../../domain/plan_models.dart';
 
 /// Editor de um exercício da ficha: descanso, observação e séries.
@@ -20,8 +21,6 @@ class PlanExerciseEditor extends StatelessWidget {
   final int index;
   final VoidCallback onChanged;
   final VoidCallback onRemove;
-
-  static const restOptions = [30, 45, 60, 90, 120, 150, 180, 240, 300];
 
   void _addSet() {
     final last = exercise.sets.lastOrNull;
@@ -85,7 +84,7 @@ class PlanExerciseEditor extends StatelessWidget {
               ),
               items: [
                 const DropdownMenuItem(child: Text('Padrão das configurações')),
-                for (final s in {...restOptions, ?exercise.restSeconds})
+                for (final s in {...restOptionsSeconds, ?exercise.restSeconds})
                   DropdownMenuItem(
                     value: s,
                     child: Text(formatRest(Duration(seconds: s))),

@@ -94,7 +94,8 @@ Tema claro e escuro. Feito para quem treina e quer ver, em números, o resultado
 | ID de publicidade | Não usa | Nenhum SDK de anúncios/análise |
 | Classificação de conteúdo (IARC) | Categoria utilitário/outro; "não" para violência, sexo, linguagem, drogas, apostas, interação entre usuários, compartilhamento de localização e compras | Deve resultar em classificação livre |
 | Público-alvo | 18 anos ou mais (recomendado) | Evita as regras do programa Famílias; a política diz que o app não é para menores de 13 |
-| Segurança dos dados | "O app não coleta nem compartilha dados" | Tudo é processado só no aparelho; o app não tem permissão de internet. O backup automático é feito pelo Android (conta Google do usuário), não pelo app — está explicado na política |
+| Segurança dos dados | "O app não coleta nem compartilha dados" | Tudo é processado só no aparelho; o app não tem permissão de internet. O backup automático é feito pelo Android (conta Google do usuário), não pelo app — está explicado na política. Enviar fichas ou a imagem do treino é uma ação do usuário pela folha de compartilhamento do sistema (transferência iniciada pelo usuário), não uma coleta pelo app |
+| Permissões sensíveis | Nenhuma declaração | `SCHEDULE_EXACT_ALARM` (aviso de fim do descanso) é concedida pelo usuário e não exige formulário; só `USE_EXACT_ALARM`, que o app **não** usa, exigiria |
 | Declaração de apps de saúde | Informe recursos de **condicionamento físico** (registro de treinos) e **acompanhamento de peso/medidas**; não é dispositivo médico; não usa Health Connect | Obrigatória para todos os apps desde 2025 |
 | App de notícias / governo / COVID / financeiro | Não | — |
 

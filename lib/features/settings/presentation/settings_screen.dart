@@ -5,13 +5,14 @@ import 'package:material_ui/material_ui.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/utils/formatters.dart';
+import '../../timer/domain/rest_options.dart';
+import '../../timer/presentation/rest_alarm_permission_notice.dart';
 import '../domain/app_preferences.dart';
 import 'settings_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const restOptions = [30, 45, 60, 90, 120, 150, 180, 240, 300];
   static const incrementOptions = [0.5, 1.0, 1.25, 2.0, 2.5, 5.0];
 
   @override
@@ -59,15 +60,17 @@ class SettingsScreen extends ConsumerWidget {
             onChanged: (v) =>
                 controller.update((s) => s.copyWith(timerVibration: v)),
           ),
+          const RestAlarmPermissionNotice(),
           const SizedBox(height: 8),
           DropdownButtonFormField<int>(
             isExpanded: true,
-            initialValue: restOptions.contains(settings.defaultRestSeconds)
+            initialValue:
+                restOptionsSeconds.contains(settings.defaultRestSeconds)
                 ? settings.defaultRestSeconds
                 : null,
             decoration: const InputDecoration(labelText: 'Descanso padrão'),
             items: [
-              for (final seconds in restOptions)
+              for (final seconds in restOptionsSeconds)
                 DropdownMenuItem(
                   value: seconds,
                   child: Text(formatRest(Duration(seconds: seconds))),

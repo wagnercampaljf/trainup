@@ -12,6 +12,8 @@ import '../../../core/widgets/stat_tile.dart';
 import '../data/workout_session_repository.dart';
 import '../domain/session_models.dart';
 import 'set_text.dart';
+import 'share/share_workout_sheet.dart';
+import 'workout_summary_screen.dart';
 
 /// Tudo o que foi realizado em um treino.
 class SessionDetailScreen extends ConsumerWidget {
@@ -36,12 +38,28 @@ class SessionDetailScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _share(BuildContext context, WidgetRef ref) async {
+    final data = await ref.read(workoutSummaryProvider(sessionId).future);
+    if (data == null || !context.mounted) return;
+    await showShareWorkoutSheet(
+      context,
+      detail: data.detail,
+      records: data.records,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Treino'),
         actions: [
+          IconButton(
+            key: const Key('session_share'),
+            tooltip: 'Compartilhar treino',
+            icon: const Icon(Icons.share),
+            onPressed: () => _share(context, ref),
+          ),
           IconButton(
             tooltip: 'Excluir treino',
             icon: const Icon(Icons.delete_outline),

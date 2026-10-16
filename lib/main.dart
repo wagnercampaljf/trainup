@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,9 @@ import 'features/timer/data/timer_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Tela cheia: esconde as barras do sistema (status e navegação). Deslizar
+  // a partir da borda as mostra por alguns segundos.
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   Intl.defaultLocale = appLocale;
   await initializeDateFormatting(appLocale);
 

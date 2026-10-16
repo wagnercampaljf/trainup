@@ -245,6 +245,44 @@ class WorkoutPlanRepository {
     });
   }
 
+  /// Altera só o descanso de um exercício da ficha (`null` = padrão).
+  ///
+  /// Retorna `false` se o exercício não está mais em uma ficha ativa.
+  Future<bool> updateExerciseRest(int planExerciseId, int? restSeconds) {
+    if (restSeconds != null && (restSeconds < 0 || restSeconds > 3600)) {
+      throw ArgumentError('Descanso deve estar entre 0 e 3600 segundos');
+    }
+    return _db.transaction(() async {
+      final row =
+          await (_db.select(_db.workoutPlanExercises).join([
+                innerJoin(
+                  _db.workoutPlans,
+                  _db.workoutPlans.id.equalsExp(
+                    _db.workoutPlanExercises.workoutPlanId,
+                  ),
+                ),
+              ])..where(
+                _db.workoutPlanExercises.id.equals(planExerciseId) &
+                    _db.workoutPlans.isActive.equals(true),
+              ))
+              .getSingleOrNull();
+      if (row == null) return false;
+      final now = DateTime.now();
+      await (_db.update(
+        _db.workoutPlanExercises,
+      )..where((pe) => pe.id.equals(planExerciseId))).write(
+        WorkoutPlanExercisesCompanion(
+          restSeconds: Value(restSeconds),
+          updatedAt: Value(now),
+        ),
+      );
+      await (_db.update(_db.workoutPlans)
+            ..where((p) => p.id.equals(row.readTable(_db.workoutPlans).id)))
+          .write(WorkoutPlansCompanion(updatedAt: Value(now)));
+      return true;
+    });
+  }
+
   /// Soft delete: a ficha some das listas, o histórico permanece.
   Future<void> deletePlan(int planId) async {
     await (_db.update(
@@ -258,8 +296,9 @@ class WorkoutPlanRepository {
   }
 
   /// Atualiza a ficha com o que foi executado na sessão (escolha explícita
-  /// do usuário ao finalizar). Exercícios pulados não alteram a ficha;
-  /// exercícios adicionados durante o treino são incluídos ao final.
+  /// do usuário ao finalizar): séries concluídas e descanso. Exercícios
+  /// pulados não alteram a ficha; exercícios adicionados durante o treino são
+  /// incluídos ao final.
   ///
   /// Retorna `false` (sem alterar nada) se a ficha não existe mais ou foi
   /// excluída.
@@ -305,9 +344,10 @@ class WorkoutPlanRepository {
               .where((e) => e.id == sessionExercise.planExerciseId)
               .firstOrNull;
           if (existing != null) {
-            existing.sets
-              ..clear()
-              ..addAll(newSets);
+            existing
+              ..restSeconds = sessionExercise.restSeconds
+              ..sets.clear()
+              ..sets.addAll(newSets);
           } else {
             draft.exercises.add(
               PlanExerciseDraft(

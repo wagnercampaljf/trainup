@@ -26,9 +26,7 @@ class _UnsupportedUpgrade extends AppDatabase {
 
 void main() {
   test('fluxo completo em arquivo SQLite fechado e reaberto preserva todos os dados', () async {
-    final directory = await Directory.systemTemp.createTemp(
-      'trainup_audit_',
-    );
+    final directory = await Directory.systemTemp.createTemp('trainup_audit_');
     final file = File('${directory.path}/audit.sqlite');
     var db = AppDatabase(NativeDatabase(file));
     addTearDown(() async {

@@ -7,7 +7,7 @@ abstract final class PrivacyPolicy {
   static const appName = 'TrainUp';
   static const controller = 'Campal Dev';
   static const contactEmail = 'wagnercampaljf@gmail.com';
-  static const effectiveDate = '6 de outubro de 2026';
+  static const effectiveDate = '14 de outubro de 2026';
 
   static const sections = <(String, String)>[
     (
@@ -39,6 +39,21 @@ abstract final class PrivacyPolicy {
           'aparelho. O app não acessa a internet, não envia dados ao '
           'desenvolvedor, não compartilha dados com terceiros e não usa '
           'bibliotecas de terceiros que coletem dados.',
+    ),
+    (
+      'Compartilhamento feito por você',
+      'Você pode enviar fichas (arquivo) ou a imagem de resumo de um treino '
+          'pelo compartilhamento do sistema e importar fichas recebidas. O '
+          'envio só acontece quando você toca em compartilhar, contém apenas '
+          'o que é mostrado na tela e é feito pelo app que você escolher (por '
+          'exemplo, WhatsApp ou e-mail), sob as regras desse app. O arquivo '
+          'de fichas não inclui seu perfil, medidas ou histórico.',
+    ),
+    (
+      'Permissões',
+      'Notificações e "Alarmes e lembretes" são usados apenas para avisar o '
+          'fim do descanso entre séries com o celular bloqueado. O aviso é '
+          'agendado no próprio aparelho e nenhum dado é enviado.',
     ),
     (
       'Backup do sistema',

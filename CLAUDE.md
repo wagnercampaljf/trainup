@@ -10,6 +10,20 @@ The user writes in Portuguese (pt-BR). Reply in pt-BR; UI strings, code comments
 
 ## Environment and commands
 
+**Windows host (current, since 2026-10-14):** no Flutter, Android SDK or Python on the host. Everything runs in Docker through `tool/docker_flutter.sh`, run from Git Bash. Docker Desktop must be running.
+
+- The image is `ghcr.io/cirruslabs/flutter:stable` (Android SDK + Java). Flutter 3.47.6 lives in the volume `trainup-flutter-sdk`, and pub/Gradle caches in `trainup-pub-cache` / `trainup-gradle`.
+- Commands:
+  - `bash tool/docker_flutter.sh test --timeout 120s`
+  - `bash tool/docker_flutter.sh analyze`
+  - `bash tool/docker_flutter.sh build apk --debug`
+  - `bash tool/docker_flutter.sh --shell 'dart format . && python3 tool/generate_privacy_html.py'`
+- The working copy uses CRLF (`core.autocrlf=true`). Edit with the Edit tool, not with scripts that match `\n`.
+- The release keystore and `key.properties` are not on this machine, so release builds are debug-signed.
+- The Docker daemon also starts the containers of another project (`taredia-*`). Leave them alone.
+
+The Linux notes below describe the original machine:
+
 - Flutter SDK is **not on PATH**: `export PATH=~/development/flutter/bin:$PATH` (Flutter 3.47.6 / Dart 3.13).
 - The host is Ubuntu 20.04 (glibc 2.31). The SQLite library bundled by `sqlite3` needs glibc 2.33, so **any test that opens a database fails on the host**. Run those in Docker:
   - Full suite: `tool/docker_test.sh` (same as `flutter test`, using the host SDK and pub-cache inside `ghcr.io/cirruslabs/flutter:stable`).
@@ -58,6 +72,9 @@ Feature-first (`lib/features/<feature>/{data,domain,presentation}`), plus `lib/c
   - `TimerOverlay` sits in `MaterialApp.builder`, above the Navigator. It must always return the **same `Stack` structure**: swapping between `child` and `Stack` remounts the Navigator and loses screen state.
   - The button snaps to the nearest side and is hidden while the timer bottom sheet is open (`timerSheetOpenProvider`).
   - Finishing or cancelling a workout resets the timer.
+  - Locked screen/background: `app.dart` schedules a local notification (`RestAlarm`, flutter_local_notifications) on `onHide` and cancels it on `onShow`. In-app feedback is skipped on resume when the system alarm already fired. `RestAlarm` is a no-op outside Android/iOS, so tests need no override.
+- **Platform I/O** (share sheet, file picker) goes through `fileSharingProvider` (`core/platform/file_sharing.dart`). Widget tests override it with a fake.
+- **Plan export/import**: the JSON format is defined in `workout_plans/domain/plan_transfer.dart`, which has a `version` field. Exercises are matched by `normalizeName`. Import only adds plans and never overwrites.
 - **Theme**: `core/theme/app_theme.dart`.
   - Brand colors live in `AppColors` (primary blue `#2563EB` / `#8AB4FF`; green = completed/progress; red only for errors).
   - The scheme is composed from Material 3 `fromSeed` variants.

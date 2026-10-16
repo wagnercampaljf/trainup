@@ -9,10 +9,13 @@ import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/confirmation_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
+import '../../settings/presentation/settings_controller.dart';
+import '../../timer/presentation/rest_picker.dart';
 import '../../workouts/presentation/set_text.dart';
 import '../../workouts/presentation/start_workout.dart';
 import '../data/workout_plan_repository.dart';
 import '../domain/plan_models.dart';
+import 'plan_transfer_actions.dart';
 
 class PlanDetailScreen extends ConsumerWidget {
   const PlanDetailScreen({required this.planId, super.key});
@@ -43,6 +46,12 @@ class PlanDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(plan.value?.name ?? 'Ficha'),
         actions: [
+          IconButton(
+            key: const Key('export_plan'),
+            tooltip: 'Enviar ficha',
+            icon: const Icon(Icons.ios_share),
+            onPressed: () => exportPlans(context, ref, [planId]),
+          ),
           IconButton(
             tooltip: 'Editar ficha',
             icon: const Icon(Icons.edit_outlined),
@@ -87,13 +96,40 @@ class PlanDetailScreen extends ConsumerWidget {
   }
 }
 
-class _PlanDetailBody extends StatelessWidget {
+class _PlanDetailBody extends ConsumerWidget {
   const _PlanDetailBody({required this.plan});
 
   final PlanDraft plan;
 
+  Future<void> _changeRest(
+    BuildContext context,
+    WidgetRef ref,
+    PlanExerciseDraft exercise,
+    int defaultRest,
+  ) async {
+    final choice = await showRestPicker(
+      context,
+      exerciseName: exercise.exerciseName,
+      current: exercise.restSeconds,
+      defaultSeconds: defaultRest,
+    );
+    if (choice == null || !context.mounted) return;
+    try {
+      await ref
+          .read(workoutPlanRepositoryProvider)
+          .updateExerciseRest(exercise.id!, choice.seconds);
+    } on Object catch (e) {
+      if (context.mounted) {
+        context.showMessage('Não foi possível alterar o descanso: $e');
+      }
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final defaultRest = ref.watch(
+      settingsProvider.select((s) => s.defaultRestSeconds),
+    );
     if (plan.exercises.isEmpty) {
       return EmptyState(
         icon: Icons.fitness_center,
@@ -136,13 +172,20 @@ class _PlanDetailBody extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (exercise.restSeconds != null)
-                    Text(
-                      'Descanso: '
-                      '${formatRest(Duration(seconds: exercise.restSeconds!))}',
-                    ),
+                  Text(
+                    'Descanso: '
+                    '${formatRest(Duration(seconds: exercise.restSeconds ?? defaultRest))}'
+                    '${exercise.restSeconds == null ? ' (padrão)' : ''}',
+                  ),
                   if (exercise.notes != null) Text(exercise.notes!),
                 ],
+              ),
+              trailing: IconButton(
+                key: Key('plan_rest_${exercise.id}'),
+                tooltip: 'Alterar descanso de ${exercise.exerciseName}',
+                icon: const Icon(Icons.timer_outlined),
+                onPressed: () =>
+                    _changeRest(context, ref, exercise, defaultRest),
               ),
             ),
           ),

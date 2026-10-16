@@ -7,6 +7,7 @@ import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../workouts/presentation/start_workout.dart';
 import '../data/workout_plan_repository.dart';
+import 'plan_transfer_actions.dart';
 import 'widgets/workout_plan_card.dart';
 
 class PlansScreen extends ConsumerWidget {
@@ -24,6 +25,32 @@ class PlansScreen extends ConsumerWidget {
             tooltip: 'Catálogo de exercícios',
             icon: const Icon(Icons.fitness_center),
             onPressed: () => context.push(Routes.exercises),
+          ),
+          PopupMenuButton<String>(
+            key: const Key('plans_menu'),
+            tooltip: 'Mais opções',
+            onSelected: (action) => action == 'import'
+                ? importPlansFromFile(context, ref)
+                : chooseAndExportPlans(context, ref, plans.value ?? const []),
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'import',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.file_download_outlined),
+                  title: Text('Importar fichas'),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'export',
+                enabled: hasPlans,
+                child: const ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.ios_share),
+                  title: Text('Exportar fichas'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

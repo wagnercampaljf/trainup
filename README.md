@@ -25,10 +25,20 @@ banco SQLite local no aparelho.
 - **Execução do treino**: carga com botões −/+ (e digitação), repetições,
   conclusão de série com um toque (**salva na hora**), último treino exibido,
   "usar cargas do último treino", adicionar/remover séries, adicionar ou pular
-  exercício — tudo só na sessão atual, a menos que o usuário escolha
-  **atualizar a ficha** ao finalizar.
+  exercício, **alterar o descanso** (com opção de gravar também na ficha) —
+  tudo só na sessão atual, a menos que o usuário escolha **atualizar a ficha**
+  ao finalizar.
+- **Descanso por exercício** editável no editor da ficha, direto no detalhe da
+  ficha (ícone de relógio) e durante o treino.
 - **Resumo do treino**: duração, exercícios, séries, volume, comparação com o
   treino anterior da ficha, recordes (🏆) e observação.
+- **Compartilhar o treino**: no resumo e no histórico, gera uma imagem 9:16
+  (1080×1920, formato story) com os números do treino e abre o
+  compartilhamento do sistema (Instagram, WhatsApp…).
+- **Exportar e importar fichas** (arquivo `.json`): o personal monta as fichas,
+  envia o arquivo, e o aluno importa em *Fichas > ⋮ > Importar fichas*.
+  Exercícios são associados pelo nome; os que faltam são criados. A importação
+  só adiciona fichas e nunca altera as existentes.
 - **Histórico** paginado e detalhe de cada treino.
 - **Histórico por exercício**: maior carga, última carga, nº de treinos, maior
   volume, gráfico (maior peso, peso médio, volume total, melhor série) com
@@ -40,7 +50,11 @@ banco SQLite local no aparelho.
   Sobrevive a navegação, segundo plano e fechamento do app. Ao terminar,
   mostra "Descanso concluído" com um **X**; após 5 s o aviso minimiza para um
   ícone de relógio (tocar no ícone reabre o aviso). Finalizar ou cancelar o
-  treino encerra o descanso pendente.
+  treino encerra o descanso pendente. **Com o celular bloqueado** (ou o app em
+  segundo plano), o fim do descanso é avisado por uma notificação agendada no
+  sistema, com vibração e som.
+- **Tela cheia** (modo imersivo): as barras de status e de navegação ficam
+  ocultas; deslizar a partir da borda as mostra por alguns segundos.
 - **Retomada de treino**: ao reabrir com treino em andamento, o app pergunta se
   deseja continuar ou encerrar.
 - **Tema claro, escuro ou do sistema**, e configurações persistidas (paleta
@@ -279,8 +293,13 @@ Detalhes do modelo em [docs/architecture.md](docs/architecture.md).
   Flutter. No Android/iOS, `SystemSoundType.alert` é ignorado e o "clique"
   depende das configurações do aparelho; a vibração funciona normalmente.
   Um som próprio exigiria um plugin de áudio (ex.: `audioplayers`).
-- **Notificação com o app fechado:** se o descanso terminar com o app em
-  segundo plano, o aviso aparece ao voltar (o tempo continua correto).
-  Notificação local agendada exigiria `flutter_local_notifications`.
+- **Aviso com o celular bloqueado:** usa `flutter_local_notifications`. No
+  Android 13+ o app pede a permissão de notificações no primeiro descanso. No
+  Android 14+, "Alarmes e lembretes" vem negado por padrão; sem ele o aviso
+  pode atrasar. O app mostra um aviso com o botão PERMITIR nas Configurações e
+  na tela do temporizador.
+- **Importar fichas** usa o seletor de arquivos do sistema: o aluno salva o
+  arquivo recebido (ex.: WhatsApp > Salvar em Downloads) e o escolhe. Abrir o
+  arquivo direto pelo WhatsApp ("Abrir com TrainUp") ainda não é suportado.
 - Ainda não validado em aparelho físico/emulador nesta etapa (veja o resumo de
   entrega).
