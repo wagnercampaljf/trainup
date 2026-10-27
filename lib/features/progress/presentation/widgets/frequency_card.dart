@@ -4,10 +4,11 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/router/routes.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/clock.dart';
 import '../../data/progress_repository.dart';
 
-/// Treinos da semana (com a meta) e do mês, na Home.
+/// Semana atual (meta, dias treinados, sequência) e o mês, no Início.
 class FrequencyCard extends ConsumerWidget {
   const FrequencyCard({super.key});
 
@@ -25,61 +26,48 @@ class FrequencyCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final frequency = ref.watch(trainingFrequencyProvider).value;
-    if (frequency == null) return const SizedBox.shrink();
+    if (frequency == null) {
+      // Reserva o espaço: o carregamento não se passa por "0 treinos".
+      return const Card(child: SizedBox(height: 168));
+    }
     final today = ref.watch(clockProvider)().weekday;
-    final green = context.colors.tertiary;
+    final colors = context.colors;
+    final green = colors.tertiary;
     final goal = frequency.weeklyGoal;
     final done = frequency.weekCount;
+    final streak = frequency.streakWeeks;
 
     return Card(
       key: const Key('frequency_card'),
-      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => context.go(Routes.history),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpace.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: AppSpace.sm,
+                runSpacing: AppSpace.xs,
                 children: [
-                  Expanded(
-                    child: Text('Esta semana', style: context.text.titleSmall),
-                  ),
                   Text(
                     '$done de $goal treinos',
-                    style: context.text.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
+                    style: context.text.headlineSmall?.copyWith(
                       color: frequency.goalReached ? green : null,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: (done / goal).clamp(0, 1),
-                  minHeight: 6,
-                  color: green,
-                  backgroundColor: context.colors.surfaceContainerHighest,
-                  semanticsLabel: 'Meta semanal: $done de $goal treinos',
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  for (var day = DateTime.monday; day <= DateTime.sunday; day++)
-                    _DayDot(
-                      label: dayLabels[day - 1],
-                      semantics: _dayNames[day - 1],
-                      trained: frequency.weekDays.contains(day),
-                      isToday: day == today,
+                  if (streak > 0)
+                    _Badge(
+                      icon: Icons.local_fire_department_outlined,
+                      text: streak == 1
+                          ? '1 semana na meta'
+                          : '$streak semanas na meta',
                     ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpace.xs),
               Text(
                 frequency.goalReached
                     ? 'Meta da semana cumprida! 💪'
@@ -87,9 +75,26 @@ class FrequencyCard extends ConsumerWidget {
                     ? 'Falta 1 treino para a meta da semana.'
                     : 'Faltam ${frequency.remainingThisWeek} treinos para a '
                           'meta da semana.',
-                style: context.text.bodyMedium,
+                style: context.text.bodyMedium?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
               ),
-              const Divider(height: 24),
+              const SizedBox(height: AppSpace.md),
+              Row(
+                children: [
+                  for (var day = DateTime.monday; day <= DateTime.sunday; day++)
+                    Expanded(
+                      child: _DayDot(
+                        label: dayLabels[day - 1],
+                        semantics: _dayNames[day - 1],
+                        trained: frequency.weekDays.contains(day),
+                        isToday: day == today,
+                        isFuture: day > today,
+                      ),
+                    ),
+                ],
+              ),
+              const Divider(height: AppSpace.xl),
               Row(
                 children: [
                   Expanded(
@@ -104,14 +109,7 @@ class FrequencyCard extends ConsumerWidget {
                       value: _workouts(frequency.previousMonthCount),
                     ),
                   ),
-                  Expanded(
-                    child: _MonthStat(
-                      label: 'Sequência na meta',
-                      value: frequency.streakWeeks == 1
-                          ? '1 semana'
-                          : '${frequency.streakWeeks} semanas',
-                    ),
-                  ),
+                  Icon(Icons.chevron_right, color: colors.onSurfaceVariant),
                 ],
               ),
             ],
@@ -125,18 +123,57 @@ class FrequencyCard extends ConsumerWidget {
       count == 1 ? '1 treino' : '$count treinos';
 }
 
+class _Badge extends StatelessWidget {
+  const _Badge({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpace.sm + 2,
+        vertical: AppSpace.xs,
+      ),
+      decoration: BoxDecoration(
+        color: colors.tertiaryContainer,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: colors.onTertiaryContainer),
+          const SizedBox(width: AppSpace.xs),
+          Text(
+            text,
+            style: context.text.labelMedium?.copyWith(
+              color: colors.onTertiaryContainer,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Dia da semana: treinado = verde com ✓; hoje = contorno azul e rótulo em
+/// negrito (sem depender só da cor); dias futuros ficam mais apagados.
 class _DayDot extends StatelessWidget {
   const _DayDot({
     required this.label,
     required this.semantics,
     required this.trained,
     required this.isToday,
+    required this.isFuture,
   });
 
   final String label;
   final String semantics;
   final bool trained;
   final bool isToday;
+  final bool isFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -148,21 +185,30 @@ class _DayDot extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            label,
+            isToday ? 'Hoje' : label,
+            maxLines: 1,
+            overflow: TextOverflow.visible,
+            softWrap: false,
             style: context.text.labelSmall?.copyWith(
-              color: colors.onSurfaceVariant,
+              color: isToday ? colors.primary : colors.onSurfaceVariant,
               fontWeight: isToday ? FontWeight.w800 : null,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpace.xs),
           Container(
-            width: 32,
-            height: 32,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: trained ? colors.tertiary : colors.surfaceContainerHighest,
+              color: trained
+                  ? colors.tertiary
+                  : isFuture
+                  ? null
+                  : colors.surfaceContainerHigh,
               border: isToday
                   ? Border.all(color: colors.primary, width: 2)
+                  : isFuture
+                  ? Border.all(color: colors.outlineVariant)
                   : null,
             ),
             child: trained
@@ -192,11 +238,7 @@ class _MonthStat extends StatelessWidget {
             color: context.colors.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: context.text.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-        ),
+        Text(value, style: context.text.titleMedium?.tabular),
       ],
     );
   }

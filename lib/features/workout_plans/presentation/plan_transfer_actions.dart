@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/platform/file_sharing.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/utils/error_messages.dart';
 import '../../../core/utils/text_normalizer.dart';
 import '../data/plan_transfer_repository.dart';
 import '../domain/plan_models.dart';
@@ -44,7 +45,7 @@ Future<void> exportPlans(
                     'Para usar: TrainUp > Fichas > ⋮ > Importar fichas.',
         );
   } on Object catch (e) {
-    if (context.mounted) context.showMessage('Não foi possível exportar: $e');
+    if (context.mounted) context.showError('exportar', e);
   }
 }
 
@@ -95,7 +96,9 @@ Future<void> importPlansFromFile(BuildContext context, WidgetRef ref) async {
         builder: (context) => AlertDialog(
           title: const Text('Não foi possível importar'),
           content: Text(
-            e is PlanTransferException ? e.message : 'Erro ao ler: $e',
+            e is PlanTransferException
+                ? e.message
+                : 'O arquivo não pôde ser lido. ${friendlyError(e)}',
           ),
           actions: [
             TextButton(
@@ -125,7 +128,7 @@ Future<void> importPlansFromFile(BuildContext context, WidgetRef ref) async {
     );
     if (count == 1) unawaited(context.push(Routes.plan(result.planIds.single)));
   } on Object catch (e) {
-    if (context.mounted) context.showMessage('Não foi possível importar: $e');
+    if (context.mounted) context.showError('importar', e);
   }
 }
 

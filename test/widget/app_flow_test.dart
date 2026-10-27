@@ -95,7 +95,7 @@ void main() {
     await tester.tap(find.text('Fichas'));
     await settle(tester);
     expect(find.text('Você ainda não possui nenhuma ficha.'), findsOneWidget);
-    await tester.tap(find.text('CRIAR PRIMEIRA FICHA'));
+    await tester.tap(find.text('Criar primeira ficha'));
     await settle(tester);
     await tester.enterText(find.byKey(const Key('plan_name')), 'Ficha A');
     await tester.tap(find.byKey(const Key('add_exercise')));

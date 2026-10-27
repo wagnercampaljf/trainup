@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/stat_tile.dart';
 import '../data/workout_session_repository.dart';
 import '../domain/session_models.dart';
@@ -64,7 +65,7 @@ class _WorkoutSummaryScreenState extends ConsumerState<WorkoutSummaryScreen> {
     } on Object catch (e) {
       if (mounted) {
         setState(() => _saving = false);
-        context.showMessage('Não foi possível salvar a observação: $e');
+        context.showError('salvar a observação', e);
       }
     }
   }
@@ -78,8 +79,12 @@ class _WorkoutSummaryScreenState extends ConsumerState<WorkoutSummaryScreen> {
         title: const Text('Resumo'),
       ),
       body: summary.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Erro: $e')),
+        loading: () => const LoadingState(),
+        error: (e, _) => ErrorState(
+          error: e,
+          onRetry: () =>
+              ref.invalidate(workoutSummaryProvider(widget.sessionId)),
+        ),
         data: (data) {
           if (data == null) {
             return const Center(child: Text('Treino não encontrado.'));

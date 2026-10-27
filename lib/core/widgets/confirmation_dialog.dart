@@ -1,7 +1,12 @@
 import 'package:material_ui/material_ui.dart';
 
-/// Diálogo de confirmação para ações destrutivas. Retorna `true` se
-/// confirmado.
+import '../theme/app_theme.dart';
+
+/// Diálogo de confirmação. Retorna `true` se confirmado.
+///
+/// Com [destructive], a confirmação fica vermelha e o ícone de alerta
+/// reforça que a ação não tem volta; "Cancelar" continua sendo a saída mais
+/// fácil.
 Future<bool> showConfirmationDialog(
   BuildContext context, {
   required String title,
@@ -15,6 +20,9 @@ Future<bool> showConfirmationDialog(
     builder: (context) {
       final colors = Theme.of(context).colorScheme;
       return AlertDialog(
+        icon: destructive
+            ? Icon(Icons.warning_amber_rounded, color: colors.error)
+            : null,
         title: Text(title),
         content: Text(message),
         actions: [
@@ -23,12 +31,7 @@ Future<bool> showConfirmationDialog(
             child: Text(cancelLabel),
           ),
           FilledButton(
-            style: destructive
-                ? FilledButton.styleFrom(
-                    backgroundColor: colors.error,
-                    foregroundColor: colors.onError,
-                  )
-                : null,
+            style: destructive ? AppButtons.destructive(colors) : null,
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(confirmLabel),
           ),

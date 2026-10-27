@@ -13,7 +13,7 @@ class AppShell extends StatelessWidget {
     NavigationDestination(
       icon: Icon(Icons.home_outlined),
       selectedIcon: Icon(Icons.home),
-      label: 'Home',
+      label: 'Início',
     ),
     NavigationDestination(
       icon: Icon(Icons.assignment_outlined),

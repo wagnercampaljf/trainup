@@ -14,7 +14,7 @@ void main() {
   for (final brightness in Brightness.values) {
     group('tema ${brightness.name}', () {
       final s = AppTheme.colorScheme(brightness);
-      final card = s.surfaceContainerLow;
+      final card = AppTheme.cardColor(s);
       // Linha de série concluída: verde translúcido sobre o card.
       final completedRow = Color.alphaBlend(
         s.tertiaryContainer.withValues(alpha: .45),
@@ -37,6 +37,10 @@ void main() {
         'texto em série concluída': (s.onSurface, completedRow),
         'texto principal': (s.onSurface, s.surface),
         'texto secundário em card': (s.onSurfaceVariant, card),
+        'texto secundário no fundo da tela': (s.onSurfaceVariant, s.surface),
+        'texto em campo de entrada': (s.onSurface, s.surfaceContainerLow),
+        'link sobre card': (s.primary, card),
+        'botão claro sobre o painel de destaque': (s.primary, s.onPrimary),
         'erro sobre fundo': (s.error, s.surface),
         'texto sobre erro (excluir)': (s.onError, s.error),
         'chips/indicador': (s.onSecondaryContainer, s.secondaryContainer),
@@ -45,6 +49,8 @@ void main() {
         'linha do gráfico / borda da próxima série': (s.primary, card),
         'botão de série concluída / barra de progresso': (s.tertiary, card),
         'contorno do botão de série pendente': (s.outline, card),
+        'dia treinado (verde) sobre o card': (s.tertiary, card),
+        'trilho do progresso sobre o painel azul': (s.onPrimary, s.primary),
       };
 
       for (final entry in text.entries) {

@@ -94,7 +94,7 @@ class _ExerciseFormScreenState extends ConsumerState<ExerciseFormScreen> {
     } on Object catch (e) {
       if (mounted) {
         setState(() => _saving = false);
-        context.showMessage('Não foi possível salvar: $e');
+        context.showError('salvar', e);
       }
     }
   }

@@ -120,7 +120,7 @@ class _PlanDetailBody extends ConsumerWidget {
           .updateExerciseRest(exercise.id!, choice.seconds);
     } on Object catch (e) {
       if (context.mounted) {
-        context.showMessage('Não foi possível alterar o descanso: $e');
+        context.showError('alterar o descanso', e);
       }
     }
   }

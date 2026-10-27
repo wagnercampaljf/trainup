@@ -208,9 +208,7 @@ class SessionExerciseCard extends ConsumerWidget {
                               return removed;
                             } on Object catch (e) {
                               if (context.mounted) {
-                                context.showMessage(
-                                  'Não foi possível remover a série: $e',
-                                );
+                                context.showError('remover a série', e);
                               }
                               return false;
                             }
@@ -233,9 +231,7 @@ class SessionExerciseCard extends ConsumerWidget {
                         onSetCompleted(detail, set);
                       } on Object catch (e) {
                         if (context.mounted) {
-                          context.showMessage(
-                            'Não foi possível salvar a série: $e',
-                          );
+                          context.showError('salvar a série', e);
                         }
                       }
                     },
@@ -296,7 +292,7 @@ Future<void> _changeRest(
     }
   } on Object catch (e) {
     if (context.mounted) {
-      context.showMessage('Não foi possível alterar o descanso: $e');
+      context.showError('alterar o descanso', e);
     }
   }
 }
@@ -309,7 +305,7 @@ void _guard(BuildContext context, Future<Object?> Function() action) {
       (_) {},
       onError: (Object error) {
         if (context.mounted) {
-          context.showMessage('Não foi possível salvar: $error');
+          context.showError('salvar', error);
         }
       },
     ),

@@ -40,6 +40,29 @@ class SessionDetail {
   int get performedExerciseCount =>
       exercises.where((e) => e.hasCompletedSets).length;
 
+  /// Séries do treino: todas as dos exercícios ativos e, dos pulados, só as
+  /// que chegaram a ser concluídas.
+  int get plannedSetCount => exercises.fold(
+    0,
+    (sum, e) =>
+        sum + (e.exercise.skipped ? e.completedSets.length : e.sets.length),
+  );
+
+  /// Séries ainda não marcadas nos exercícios ativos.
+  int get pendingSetCount => exercises
+      .where((e) => !e.exercise.skipped)
+      .fold(0, (sum, e) => sum + e.sets.where((s) => !s.completed).length);
+
+  /// Exercício da próxima série pendente (o "em execução").
+  SessionExerciseDetail? get currentExercise {
+    final next = nextPendingSet;
+    if (next == null) return null;
+    for (final e in exercises) {
+      if (e.sets.any((s) => s.id == next.id)) return e;
+    }
+    return null;
+  }
+
   double get volume => exercises.fold(0, (sum, e) => sum + e.volume);
 
   Duration duration(DateTime now) {

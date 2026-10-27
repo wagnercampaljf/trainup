@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -18,6 +19,12 @@ Future<void> main() async {
   // Tela cheia: esconde as barras do sistema (status e navegação). Deslizar
   // a partir da borda as mostra por alguns segundos.
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString(
+      'assets/fonts/LICENSE-RobotoCondensed.txt',
+    );
+    yield LicenseEntryWithLineBreaks(['Roboto Condensed'], license);
+  });
   Intl.defaultLocale = appLocale;
   await initializeDateFormatting(appLocale);
 

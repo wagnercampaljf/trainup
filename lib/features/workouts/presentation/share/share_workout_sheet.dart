@@ -79,7 +79,7 @@ class _ShareWorkoutSheetState extends ConsumerState<ShareWorkoutSheet> {
             text: _shareText,
           );
     } on Object catch (e) {
-      if (mounted) context.showMessage('Não foi possível compartilhar: $e');
+      if (mounted) context.showError('compartilhar', e);
     } finally {
       if (mounted) setState(() => _sharing = false);
     }

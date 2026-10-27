@@ -44,6 +44,6 @@ Future<void> startWorkout(
       await context.push(Routes.workout(e.sessionId));
     }
   } on Object catch (e) {
-    if (context.mounted) context.showMessage('Não foi possível iniciar: $e');
+    if (context.mounted) context.showError('iniciar', e);
   }
 }
