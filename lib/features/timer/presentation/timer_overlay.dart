@@ -12,6 +12,10 @@ import 'timer_button.dart';
 ///
 /// Fica acima do Navigator (via `MaterialApp.builder`), então não é
 /// reconstruído/perdido ao navegar. O botão pode ser arrastado.
+///
+/// Some quando os controles estão abertos, quando o teclado está aberto e
+/// quando a tela visível tem o temporizador encaixado (treino em
+/// andamento, [timerDockedProvider]).
 class TimerOverlay extends ConsumerStatefulWidget {
   const TimerOverlay({required this.child, super.key});
 
@@ -112,12 +116,16 @@ class _TimerOverlayState extends ConsumerState<TimerOverlay> {
   Widget build(BuildContext context) {
     final onboarding = ref.watch(onboardingStatusProvider);
     final sheetOpen = ref.watch(timerSheetOpenProvider);
+    final docked = ref.watch(timerDockedProvider);
+    // Com o teclado aberto, o botão ficaria sobre o campo em edição (ou
+    // escondido atrás do teclado): sai de cena até o teclado fechar.
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     return ValueListenableBuilder<bool>(
       valueListenable: onboarding,
       builder: (context, completed, _) {
         // A estrutura (Stack) é sempre a mesma: trocar entre `child` e
         // `Stack` remontaria o Navigator e perderia o estado das telas.
-        final showButton = completed && !sheetOpen;
+        final showButton = completed && !sheetOpen && !docked && !keyboardOpen;
         return Stack(
           children: [
             widget.child,

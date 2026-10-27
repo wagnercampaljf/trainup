@@ -21,6 +21,22 @@ final timerSheetOpenProvider = NotifierProvider<TimerSheetOpen, bool>(
   TimerSheetOpen.new,
 );
 
+/// O temporizador está "encaixado" na tela visível (barra inferior do
+/// treino em andamento). O botão flutuante some para não haver dois
+/// controles nem sobreposição com as ações do treino.
+class TimerDocked extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void set({required bool docked}) {
+    if (ref.mounted && state != docked) state = docked;
+  }
+}
+
+final timerDockedProvider = NotifierProvider<TimerDocked, bool>(
+  TimerDocked.new,
+);
+
 Future<void> showTimerBottomSheet(BuildContext context) async {
   final sheet = ProviderScope.containerOf(
     context,

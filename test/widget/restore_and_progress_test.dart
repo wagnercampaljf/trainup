@@ -92,7 +92,7 @@ void main() {
     await tester.tap(find.byKey(const Key('resume_running_workout')));
     await settle(tester);
 
-    expect(find.text('SUPINO RETO'), findsOneWidget);
+    expect(find.text('Supino reto'), findsOneWidget);
     expect(find.text('1 de 3 séries · 360 kg'), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
   });

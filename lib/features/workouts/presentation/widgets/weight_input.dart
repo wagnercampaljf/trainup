@@ -21,6 +21,17 @@ class WeightInput extends StatefulWidget {
   final bool enabled;
   final Key? fieldKey;
 
+  /// Botões −/+ (área de toque de 48 × 48).
+  static const stepWidth = 48.0;
+
+  /// O campo cresce com a fonte para "102,5" continuar inteiro.
+  static double fieldWidthFor(double textScale) =>
+      60 * textScale.clamp(1.0, 2.0);
+
+  /// Largura total (−, campo, +).
+  static double widthFor(double textScale) =>
+      stepWidth * 2 + fieldWidthFor(textScale);
+
   @override
   State<WeightInput> createState() => _WeightInputState();
 }
@@ -94,7 +105,9 @@ class _WeightInputState extends State<WeightInput> {
               : null,
         ),
         SizedBox(
-          width: 64,
+          width: WeightInput.fieldWidthFor(
+            MediaQuery.textScalerOf(context).scale(1),
+          ),
           child: TextField(
             key: widget.fieldKey,
             controller: _controller,
@@ -157,7 +170,7 @@ class _StepButton extends StatelessWidget {
         onLongPress: onLongPress,
         radius: 24,
         child: SizedBox(
-          width: 44,
+          width: WeightInput.stepWidth,
           height: 48,
           child: Icon(
             icon,

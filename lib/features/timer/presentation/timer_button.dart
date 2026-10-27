@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
 import '../domain/timer_status.dart';
 import 'timer_controller.dart';
@@ -16,6 +18,7 @@ class TimerButton extends ConsumerStatefulWidget {
   const TimerButton({
     required this.onPressed,
     this.anchoredRight = false,
+    this.docked = false,
     super.key,
   });
 
@@ -24,6 +27,10 @@ class TimerButton extends ConsumerStatefulWidget {
 
   /// Botão preso à borda direita: a pílula cresce para a esquerda.
   final bool anchoredRight;
+
+  /// Encaixado na barra do treino: sem sombra e com rótulo também quando
+  /// parado ("Descanso") e quando o aviso de concluído está minimizado.
+  final bool docked;
 
   /// Tempo em que o aviso de descanso concluído fica aberto.
   static const noticeDuration = Duration(seconds: 5);
@@ -86,15 +93,17 @@ class _TimerButtonState extends ConsumerState<TimerButton> {
       content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _PillAction(
-            key: const Key('timer_button'),
-            semantics: 'Descanso concluído. Abrir temporizador',
-            onTap: widget.onPressed,
-            padding: const EdgeInsets.only(left: 18, right: 4),
-            child: _Label(
-              leading: Icon(Icons.check_circle, color: foreground),
-              text: 'Descanso concluído',
-              color: foreground,
+          Flexible(
+            child: _PillAction(
+              key: const Key('timer_button'),
+              semantics: 'Descanso concluído. Abrir temporizador',
+              onTap: widget.onPressed,
+              padding: const EdgeInsets.only(left: 18, right: 4),
+              child: _Label(
+                leading: Icon(Icons.check_circle, color: foreground),
+                text: 'Descanso concluído',
+                color: foreground,
+              ),
             ),
           ),
           _PillAction(
@@ -113,7 +122,13 @@ class _TimerButtonState extends ConsumerState<TimerButton> {
         onTap: _openNotice,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         // Relógio com "check": indica o fim do descanso sem depender da cor.
-        child: Icon(Icons.alarm_on, color: foreground),
+        child: widget.docked
+            ? _Label(
+                leading: Icon(Icons.alarm_on, color: foreground),
+                text: 'Concluído',
+                color: foreground,
+              )
+            : Icon(Icons.alarm_on, color: foreground),
       );
     } else {
       final (
@@ -142,7 +157,7 @@ class _TimerButtonState extends ConsumerState<TimerButton> {
         ),
         _ => (
           Icon(Icons.timer_outlined, color: foreground),
-          null,
+          widget.docked ? 'Descanso' : null,
           'Abrir temporizador',
         ),
       };
@@ -157,18 +172,30 @@ class _TimerButtonState extends ConsumerState<TimerButton> {
       );
     }
 
-    return Material(
-      color: background,
-      elevation: 6,
-      shadowColor: Colors.black45,
-      shape: const StadiumBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: AnimatedSize(
-        duration: const Duration(milliseconds: 200),
-        alignment: widget.anchoredRight
-            ? Alignment.centerRight
-            : Alignment.centerLeft,
-        child: content,
+    // Largura limitada à tela: com fonte ampliada, o texto encurta (…) em vez
+    // de a pílula sair da tela.
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: math.max(56, MediaQuery.sizeOf(context).width - 16),
+      ),
+      child: Material(
+        color: background,
+        // Parado, o botão global fica discreto; contando, se destaca.
+        elevation: widget.docked
+            ? 0
+            : snapshot.isIdle
+            ? 2
+            : 6,
+        shadowColor: Colors.black45,
+        shape: const StadiumBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: AnimatedSize(
+          duration: AppMotion.of(context, const Duration(milliseconds: 200)),
+          alignment: widget.anchoredRight
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
+          child: content,
+        ),
       ),
     );
   }
@@ -227,13 +254,17 @@ class _Label extends StatelessWidget {
       children: [
         leading,
         const SizedBox(width: 10),
-        Text(
-          text,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            fontFeatures: const [FontFeature.tabularFigures()],
+        Flexible(
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
           ),
         ),
       ],

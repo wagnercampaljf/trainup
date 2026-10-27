@@ -119,7 +119,7 @@ void main() {
     // 3. Iniciar treino e concluir as séries.
     await tester.tap(find.byKey(const Key('start_workout')));
     await settle(tester);
-    expect(find.text('SUPINO RETO'), findsOneWidget);
+    expect(find.text('Supino reto'), findsOneWidget);
     final completeButtons = keyPrefix('complete_set_');
     expect(completeButtons, findsNWidgets(3));
     for (var i = 0; i < 3; i++) {

@@ -72,6 +72,13 @@ Future<void> _settle(WidgetTester tester, [int frames = 14]) async {
   }
 }
 
+/// Desmonta o app ainda no corpo do teste: timers da UI (relógio do treino,
+/// aviso do descanso) são cancelados antes da verificação do framework.
+Future<void> _unmount(WidgetTester tester) async {
+  await tester.pumpWidget(const SizedBox.shrink());
+  await _settle(tester, 60);
+}
+
 class _Config {
   const _Config(this.width, this.textScale, this.dark);
 
@@ -96,17 +103,34 @@ void main() {
   final now = DateTime.now();
   var offset = Duration.zero;
 
+  Future<void> capture(WidgetTester tester, String name, _Config config) =>
+      tester.runAsync(() async {
+        final boundary =
+            boundaryKey.currentContext!.findRenderObject()!
+                as RenderRepaintBoundary;
+        final image = await boundary.toImage(pixelRatio: 3);
+        final data = await image.toByteData(format: ui.ImageByteFormat.png);
+        final file = File('$_outputDir/${name}_${config.suffix}.png');
+        file.parent.createSync(recursive: true);
+        file.writeAsBytesSync(data!.buffer.asUint8List());
+      });
+
   Future<void> shot(WidgetTester tester, String name, _Config config) async {
-    await tester.runAsync(() async {
-      final boundary =
-          boundaryKey.currentContext!.findRenderObject()!
-              as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 3);
-      final data = await image.toByteData(format: ui.ImageByteFormat.png);
-      final file = File('$_outputDir/${name}_${config.suffix}.png');
-      file.parent.createSync(recursive: true);
-      file.writeAsBytesSync(data!.buffer.asUint8List());
-    });
+    // Sombras reais só no quadro capturado (o teste exige a variável de
+    // depuração restaurada ao terminar).
+    debugDisableShadows = false;
+    void repaint(RenderObject object) {
+      object.markNeedsPaint();
+      object.visitChildren(repaint);
+    }
+
+    tester.binding.renderViews.forEach(repaint);
+    await tester.pump();
+    try {
+      await capture(tester, name, config);
+    } finally {
+      debugDisableShadows = true;
+    }
   }
 
   Future<ProviderContainer> open(
@@ -115,8 +139,6 @@ void main() {
     _Config config, {
     bool onboarded = true,
   }) async {
-    debugDisableShadows = false;
-    addTearDown(() => debugDisableShadows = true);
     tester.view.physicalSize = Size(config.width * 3, 800 * 3);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
@@ -200,6 +222,7 @@ void main() {
       nav().go(Routes.profile);
       await _settle(tester);
       await shot(tester, '11_perfil', config);
+      await _unmount(tester);
     });
 
     // Treino em andamento: Início, execução e temporizador. Os dados são
@@ -226,6 +249,7 @@ void main() {
       await shot(tester, '04_treino_descanso_concluido', config);
       await _settle(tester, 60);
       await shot(tester, '04b_treino_aviso_minimizado', config);
+      await _unmount(tester);
     });
 
     testWidgets('primeiro uso ${config.suffix}', (tester) async {
@@ -233,6 +257,7 @@ void main() {
       tearDownWidgetsAndDatabase(tester, db);
       await open(tester, db, config, onboarded: false);
       await shot(tester, '12_onboarding', config);
+      await _unmount(tester);
     });
 
     testWidgets('sem fichas ${config.suffix}', (tester) async {
@@ -247,6 +272,7 @@ void main() {
       nav().go(Routes.progress);
       await _settle(tester);
       await shot(tester, '15_evolucao_vazio', config);
+      await _unmount(tester);
     });
   }
 }

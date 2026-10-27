@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/extensions/context_extensions.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
@@ -13,6 +14,8 @@ import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/confirmation_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../settings/presentation/settings_controller.dart';
+import '../../timer/presentation/timer_bottom_sheet.dart';
+import '../../timer/presentation/timer_button.dart';
 import '../../timer/presentation/timer_controller.dart';
 import '../../workout_plans/data/workout_plan_repository.dart';
 import '../data/workout_session_repository.dart';
@@ -21,6 +24,10 @@ import '../domain/session_status.dart';
 import 'widgets/session_exercise_card.dart';
 
 /// Execução do treino. Cada alteração é salva imediatamente no banco.
+///
+/// O temporizador de descanso fica encaixado na barra inferior (o botão
+/// flutuante global some enquanto esta tela está visível). "Finalizar" fica
+/// no topo durante o treino e ganha destaque quando não há séries pendentes.
 class WorkoutScreen extends ConsumerStatefulWidget {
   const WorkoutScreen({required this.sessionId, super.key});
 
@@ -30,13 +37,63 @@ class WorkoutScreen extends ConsumerStatefulWidget {
   ConsumerState<WorkoutScreen> createState() => _WorkoutScreenState();
 }
 
-class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
+class _WorkoutScreenState extends ConsumerState<WorkoutScreen> with RouteAware {
   final _rowKeys = <int, GlobalKey>{};
+
+  /// Outra tela (ex.: escolher exercício) está por cima desta.
+  var _covered = false;
+  bool? _dockedApplied;
+  late final TimerDocked _docked;
+  PageRoute<dynamic>? _route;
+
+  @override
+  void initState() {
+    super.initState();
+    _docked = ref.read(timerDockedProvider.notifier);
+  }
 
   GlobalKey _rowKey(int setId) => _rowKeys.putIfAbsent(setId, GlobalKey.new);
 
   WorkoutSessionRepository get _repo =>
       ref.read(workoutSessionRepositoryProvider);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute && route != _route) {
+      if (_route != null) appRouteObserver.unsubscribe(this);
+      _route = route;
+      appRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void didPushNext() => setState(() => _covered = true);
+
+  @override
+  void didPopNext() => setState(() => _covered = false);
+
+  @override
+  void dispose() {
+    appRouteObserver.unsubscribe(this);
+    // Fora da fase de build: o provider não pode mudar durante a montagem.
+    final docked = _docked;
+    if (_dockedApplied ?? false) {
+      Future.microtask(() => docked.set(docked: false));
+    }
+    super.dispose();
+  }
+
+  /// O timer fica encaixado enquanto o treino está em andamento e visível.
+  void _syncDocked({required bool running}) {
+    final docked = running && !_covered;
+    if (_dockedApplied == docked) return;
+    _dockedApplied = docked;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _docked.set(docked: docked);
+    });
+  }
 
   void _onSetCompleted(
     SessionDetail session,
@@ -62,7 +119,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
           Scrollable.ensureVisible(
             context,
             alignment: .35,
-            duration: const Duration(milliseconds: 300),
+            duration: AppMotion.of(context, const Duration(milliseconds: 300)),
           ),
         );
       }
@@ -148,31 +205,70 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
     );
     final session = detail.value;
     final running = session?.session.status == SessionStatus.running;
+    _syncDocked(running: running);
+    final compactBar =
+        MediaQuery.sizeOf(context).width < 360 ||
+        MediaQuery.textScalerOf(context).scale(1) > 1.15;
 
     return Scaffold(
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(session?.session.planNameSnapshot ?? 'Treino'),
+            Text(
+              session?.session.planNameSnapshot ?? 'Treino',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             if (session != null && running)
               _ElapsedText(startedAt: session.session.startedAt),
           ],
         ),
         actions: [
           if (running) ...[
-            IconButton(
-              tooltip: 'Adicionar exercício',
-              icon: const Icon(Icons.playlist_add),
-              onPressed: _addExercise,
+            // Em telas estreitas/fonte grande, o atalho vai para o menu para
+            // o nome da ficha não ser espremido.
+            if (!compactBar)
+              IconButton(
+                tooltip: 'Adicionar exercício',
+                icon: const Icon(Icons.playlist_add),
+                onPressed: _addExercise,
+              ),
+            TextButton(
+              key: const Key('finish_workout'),
+              onPressed: () => _finish(session!),
+              child: const Text('Finalizar'),
             ),
             PopupMenuButton<String>(
               tooltip: 'Mais opções',
               onSelected: (action) {
                 if (action == 'cancel') _cancel();
+                if (action == 'add') _addExercise();
               },
-              itemBuilder: (_) => const [
-                PopupMenuItem(value: 'cancel', child: Text('Cancelar treino')),
+              itemBuilder: (context) => [
+                if (compactBar)
+                  const PopupMenuItem(
+                    value: 'add',
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.playlist_add),
+                      title: Text('Adicionar exercício'),
+                    ),
+                  ),
+                PopupMenuItem(
+                  value: 'cancel',
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(
+                      Icons.delete_outline,
+                      color: context.colors.error,
+                    ),
+                    title: Text(
+                      'Cancelar treino',
+                      style: TextStyle(color: context.colors.error),
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -180,6 +276,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
       ),
       body: AsyncValueWidget(
         value: detail,
+        onRetry: () => ref.invalidate(sessionDetailProvider(widget.sessionId)),
         data: (session) {
           if (session == null) {
             return const EmptyState(
@@ -192,53 +289,48 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
               icon: Icons.check_circle_outline,
               message: 'Este treino já foi encerrado.',
               actionLabel: 'Ver resumo',
+              actionIcon: Icons.receipt_long_outlined,
               onAction: () => context.pushReplacement(
                 Routes.workoutSummary(widget.sessionId),
               ),
             );
           }
           final nextSetId = session.nextPendingSet?.id;
+          final count = session.exercises.length;
           return ListView(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 120),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpace.sm + 2,
+              AppSpace.sm,
+              AppSpace.sm + 2,
+              AppSpace.xl,
+            ),
             children: [
               _ProgressHeader(session: session),
-              const SizedBox(height: 8),
-              for (final exercise in session.exercises) ...[
+              const SizedBox(height: AppSpace.md),
+              for (final (index, exercise) in session.exercises.indexed) ...[
                 SessionExerciseCard(
                   key: ValueKey(exercise.exercise.id),
                   detail: exercise,
                   sessionId: widget.sessionId,
                   nextSetId: nextSetId,
                   weightIncrement: increment,
+                  position: 'Exercício ${index + 1} de $count',
                   rowKeyFor: _rowKey,
                   onSetCompleted: (e, s) => _onSetCompleted(session, e, s),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpace.md),
               ],
               OutlinedButton.icon(
                 onPressed: _addExercise,
                 icon: const Icon(Icons.add),
-                label: const Text('ADICIONAR EXERCÍCIO'),
+                label: const Text('Adicionar exercício'),
               ),
             ],
           );
         },
       ),
       bottomNavigationBar: running
-          ? SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                child: SizedBox(
-                  height: AppTheme.largeButtonHeight,
-                  child: FilledButton.icon(
-                    key: const Key('finish_workout'),
-                    onPressed: () => _finish(session!),
-                    icon: const Icon(Icons.flag),
-                    label: const Text('FINALIZAR TREINO'),
-                  ),
-                ),
-              ),
-            )
+          ? _RestDock(session: session!, onFinish: () => _finish(session))
           : null,
     );
   }
@@ -251,33 +343,184 @@ class _ProgressHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = session.exercises.fold(
-      0,
-      (sum, e) =>
-          sum + (e.exercise.skipped ? e.completedSets.length : e.sets.length),
-    );
+    final total = session.plannedSetCount;
     final done = session.completedSetCount;
+    final current = session.currentExercise;
+    final position = current == null
+        ? null
+        : session.exercises.indexOf(current) + 1;
+    final colors = context.colors;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpace.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '$done de $total séries · ${formatVolume(session.volume)}',
-            style: context.text.bodyMedium,
+          Wrap(
+            spacing: AppSpace.sm,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            children: [
+              Text(
+                '$done de $total séries · ${formatVolume(session.volume)}',
+                style: context.text.titleMedium?.tabular,
+              ),
+              if (position != null)
+                Text(
+                  'exercício $position de ${session.exercises.length}',
+                  style: context.text.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+            ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: AppSpace.sm),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: total == 0 ? 0 : done / total,
-              minHeight: 6,
-              color: context.colors.tertiary,
-              backgroundColor: context.colors.surfaceContainerHighest,
+              color: colors.tertiary,
               semanticsLabel: 'Progresso do treino: $done de $total séries',
             ),
           ),
+          const SizedBox(height: AppSpace.sm),
+          Row(
+            children: [
+              Icon(
+                Icons.cloud_done_outlined,
+                size: 16,
+                color: colors.onSurfaceVariant,
+              ),
+              const SizedBox(width: AppSpace.xs + 2),
+              Expanded(
+                child: Text(
+                  'Salvo automaticamente a cada série marcada.',
+                  style: context.text.bodySmall,
+                ),
+              ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+}
+
+/// Barra inferior do treino: o descanso (mesmo controle global, encaixado)
+/// com atalhos, e "Finalizar treino" em destaque quando tudo foi marcado.
+class _RestDock extends ConsumerWidget {
+  const _RestDock({required this.session, required this.onFinish});
+
+  final SessionDetail session;
+  final VoidCallback onFinish;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final snapshot = ref.watch(
+      timerControllerProvider.select((s) => s.snapshot),
+    );
+    final controller = ref.read(timerControllerProvider.notifier);
+    final colors = context.colors;
+    final allDone = session.pendingSetCount == 0;
+    final current = session.currentExercise;
+    final next = session.nextPendingSet;
+    final active = snapshot.isRunning || snapshot.isPaused;
+
+    return Material(
+      color: AppTheme.cardColor(colors),
+      child: SafeArea(
+        top: false,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: colors.outlineVariant)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpace.md,
+              AppSpace.sm,
+              AppSpace.md,
+              AppSpace.sm,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (allDone) ...[
+                  SizedBox(
+                    height: AppTheme.largeButtonHeight,
+                    child: FilledButton.icon(
+                      key: const Key('finish_workout_done'),
+                      onPressed: onFinish,
+                      icon: const Icon(Icons.flag),
+                      label: const Text('Finalizar treino'),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpace.sm),
+                ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: TimerButton(
+                        docked: true,
+                        onPressed: () => showTimerBottomSheet(context),
+                      ),
+                    ),
+                    if (active) ...[
+                      const SizedBox(width: AppSpace.sm),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton.outlined(
+                            key: const Key('dock_timer_toggle'),
+                            tooltip: snapshot.isRunning
+                                ? 'Pausar descanso'
+                                : 'Continuar descanso',
+                            onPressed: controller.toggle,
+                            icon: Icon(
+                              snapshot.isRunning
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpace.xs),
+                          Tooltip(
+                            message: 'Adicionar 15 segundos',
+                            child: OutlinedButton(
+                              key: const Key('dock_timer_plus'),
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(56, 48),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpace.md,
+                                ),
+                              ),
+                              onPressed: () => controller.adjust(
+                                const Duration(seconds: 15),
+                              ),
+                              child: const Text('+15s'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ] else if (current != null &&
+                        next != null &&
+                        !snapshot.isFinished) ...[
+                      const SizedBox(width: AppSpace.md),
+                      Expanded(
+                        child: Text(
+                          'A seguir: ${current.exercise.exerciseNameSnapshot}'
+                          ' · série ${current.sets.indexOf(next) + 1}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: context.text.bodySmall,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -310,9 +553,11 @@ class _ElapsedTextState extends State<_ElapsedText> {
 
   @override
   Widget build(BuildContext context) {
+    final elapsed = formatClock(DateTime.now().difference(widget.startedAt));
     return Text(
-      formatClock(DateTime.now().difference(widget.startedAt)),
-      style: context.text.bodySmall,
+      elapsed,
+      semanticsLabel: 'Tempo de treino $elapsed',
+      style: context.text.bodySmall?.tabular,
     );
   }
 }
@@ -339,33 +584,43 @@ class _FinishDialogState extends State<_FinishDialog> {
   @override
   Widget build(BuildContext context) {
     final done = widget.session.completedSetCount;
-    final pending = widget.session.exercises
-        .where((e) => !e.exercise.skipped)
-        .fold(0, (sum, e) => sum + e.sets.where((s) => !s.completed).length);
+    final pending = widget.session.pendingSetCount;
+    final colors = context.colors;
     return AlertDialog(
       title: const Text('Finalizar treino?'),
+      scrollable: true,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('$done séries concluídas.'),
+          _Line(
+            icon: Icons.check_circle,
+            color: colors.tertiary,
+            text:
+                '${done == 1 ? '1 série concluída' : '$done séries concluídas'}'
+                ', já salvas.',
+          ),
           if (pending > 0)
-            Text(
-              '$pending séries não marcadas não serão registradas.',
-              style: TextStyle(color: context.colors.error),
+            _Line(
+              icon: Icons.warning_amber_rounded,
+              color: colors.error,
+              text: pending == 1
+                  ? '1 série não marcada não será registrada.'
+                  : '$pending séries não marcadas não serão registradas.',
             ),
           if (widget.canUpdatePlan) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpace.md),
             CheckboxListTile(
               key: const Key('update_plan_checkbox'),
               contentPadding: EdgeInsets.zero,
               value: _updatePlan,
               onChanged: (v) => setState(() => _updatePlan = v ?? false),
-              title: const Text('Atualizar a ficha'),
+              title: const Text('Atualizar também a ficha'),
               subtitle: const Text(
-                'As séries concluídas hoje (cargas e repetições) e o descanso '
-                'passam a ser o planejamento. Séries não concluídas saem da '
-                'ficha; exercícios sem séries concluídas não mudam.',
+                'Muda o planejamento dos próximos treinos: as cargas, '
+                'repetições e o descanso de hoje passam a ser os da ficha. '
+                'Séries não concluídas saem da ficha; exercícios sem séries '
+                'concluídas não mudam. O histórico não é alterado.',
               ),
             ),
           ],
@@ -383,6 +638,29 @@ class _FinishDialogState extends State<_FinishDialog> {
           child: const Text('Finalizar'),
         ),
       ],
+    );
+  }
+}
+
+class _Line extends StatelessWidget {
+  const _Line({required this.icon, required this.color, required this.text});
+
+  final IconData icon;
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpace.xs),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: color),
+          const SizedBox(width: AppSpace.sm),
+          Expanded(child: Text(text)),
+        ],
+      ),
     );
   }
 }

@@ -21,6 +21,9 @@ class RepetitionInput extends StatefulWidget {
   final int minValue;
   final Key? fieldKey;
 
+  /// Largura do campo; cresce com a fonte.
+  static double widthFor(double textScale) => 52 * textScale.clamp(1.0, 2.0);
+
   @override
   State<RepetitionInput> createState() => _RepetitionInputState();
 }
@@ -71,7 +74,9 @@ class _RepetitionInputState extends State<RepetitionInput> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 56,
+      width: RepetitionInput.widthFor(
+        MediaQuery.textScalerOf(context).scale(1),
+      ),
       child: TextField(
         key: widget.fieldKey,
         controller: _controller,

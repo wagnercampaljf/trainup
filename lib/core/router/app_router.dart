@@ -27,6 +27,10 @@ import 'routes.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
+/// Avisa telas (via `RouteAware`) quando outra *tela* as cobre ou descobre.
+/// Diálogos e folhas inferiores não são `PageRoute` e não contam.
+final appRouteObserver = RouteObserver<PageRoute<dynamic>>();
+
 int _id(GoRouterState state, String name) =>
     int.parse(state.pathParameters[name]!);
 
@@ -42,6 +46,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
+    observers: [appRouteObserver],
     initialLocation: Routes.home,
     refreshListenable: onboarding,
     redirect: (context, state) {
