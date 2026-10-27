@@ -200,4 +200,27 @@ void main() {
     expect(find.textContaining('já salvas'), findsOneWidget);
     expect(find.textContaining('não marcada'), findsNothing);
   });
+
+  testWidgets('com fonte 2,0 as ações da ficha empilham sem cortar texto', (
+    tester,
+  ) async {
+    final db = createTestDatabase();
+    tearDownWidgetsAndDatabase(tester, db);
+    final demo = (await tester.runAsync(
+      () => DemoData.seed(db, now: DateTime.now()),
+    ))!;
+    await openApp(tester, db, width: 390, textScale: 2);
+    unawaited(
+      rootNavigatorKey.currentContext!.push(Routes.plan(demo.planIds.first)),
+    );
+    await settle(tester);
+    expect(tester.takeException(), isNull);
+    final button = tester.getRect(find.byKey(const Key('start_workout')));
+    final label = tester.getRect(find.text('Iniciar treino'));
+    expect(button.width, greaterThan(300), reason: 'largura total');
+    expect(label.top, greaterThanOrEqualTo(button.top));
+    expect(label.bottom, lessThanOrEqualTo(button.bottom));
+    final edit = tester.getRect(find.byKey(const Key('edit_plan')));
+    expect(edit.bottom, lessThanOrEqualTo(button.top), reason: 'empilhados');
+  });
 }

@@ -109,6 +109,58 @@ class _LoadEvolutionCard extends StatelessWidget {
     final up = e.change > 0;
     final percent = e.percent;
     final single = e.sessionCount == 1;
+    final name = Text(e.name, style: context.text.titleMedium);
+    final lines = [
+      Text(
+        single
+            ? '${formatWeight(e.lastWeight)} · 1 treino'
+            : '${formatWeight(e.firstWeight)} → '
+                  '${formatWeight(e.lastWeight)} · '
+                  '${e.sessionCount} treinos',
+        style: context.text.bodyMedium?.tabular,
+      ),
+      Text(
+        single
+            ? 'em ${formatShortDate(e.lastDate)} · sem comparação ainda'
+            : 'de ${formatShortDate(e.firstDate)} a '
+                  '${formatShortDate(e.lastDate)}'
+                  '${e.bestWeight > e.lastWeight ? ' · maior ${formatWeight(e.bestWeight)}' : ''}',
+        style: context.text.bodySmall,
+      ),
+    ];
+    final spark = single
+        ? null
+        : Sparkline(
+            values: e.maxWeights,
+            color: up ? colors.tertiary : colors.primary,
+          );
+    final change = single
+        ? _Pill(
+            text: '1º registro',
+            background: colors.surfaceContainerHigh,
+            foreground: colors.onSurfaceVariant,
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              _Pill(
+                text: '${formatSigned(e.change)} kg',
+                background: up
+                    ? colors.tertiaryContainer
+                    : colors.surfaceContainerHigh,
+                foreground: up ? colors.onTertiaryContainer : colors.onSurface,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                percent == null
+                    ? 'sem %'
+                    : '${formatSigned(percent, maxDecimals: 0)}%',
+                style: context.text.labelMedium?.tabular.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
+              ),
+            ],
+          );
     return Card(
       key: Key('load_evolution_${e.exerciseId}'),
       child: InkWell(
@@ -120,74 +172,51 @@ class _LoadEvolutionCard extends StatelessWidget {
             AppSpace.md,
             AppSpace.md,
           ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final scale = MediaQuery.textScalerOf(context).scale(1);
+              // Estreito ou fonte grande: diferença ao lado do nome e o
+              // minigráfico embaixo, em vez de espremer o texto.
+              if (constraints.maxWidth / scale < 260) {
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(e.name, style: context.text.titleMedium),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: name),
+                        const SizedBox(width: AppSpace.sm),
+                        change,
+                      ],
+                    ),
                     const SizedBox(height: 2),
-                    Text(
-                      single
-                          ? '${formatWeight(e.lastWeight)} · 1 treino'
-                          : '${formatWeight(e.firstWeight)} → '
-                                '${formatWeight(e.lastWeight)} · '
-                                '${e.sessionCount} treinos',
-                      style: context.text.bodyMedium?.tabular,
-                    ),
-                    Text(
-                      single
-                          ? 'em ${formatShortDate(e.lastDate)} · sem '
-                                'comparação ainda'
-                          : 'de ${formatShortDate(e.firstDate)} a '
-                                '${formatShortDate(e.lastDate)}'
-                                '${e.bestWeight > e.lastWeight ? ' · maior ${formatWeight(e.bestWeight)}' : ''}',
-                      style: context.text.bodySmall,
-                    ),
+                    ...lines,
+                    if (spark != null) ...[
+                      const SizedBox(height: AppSpace.sm),
+                      spark,
+                    ],
                   ],
-                ),
-              ),
-              if (!single) ...[
-                Sparkline(
-                  values: e.maxWeights,
-                  color: up ? colors.tertiary : colors.primary,
-                ),
-                const SizedBox(width: AppSpace.md),
-              ],
-              ConstrainedBox(
-                constraints: const BoxConstraints(minWidth: 64),
-                child: single
-                    ? _Pill(
-                        text: '1º registro',
-                        background: colors.surfaceContainerHigh,
-                        foreground: colors.onSurfaceVariant,
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          _Pill(
-                            text: '${formatSigned(e.change)} kg',
-                            background: up
-                                ? colors.tertiaryContainer
-                                : colors.surfaceContainerHigh,
-                            foreground: up
-                                ? colors.onTertiaryContainer
-                                : colors.onSurface,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            percent == null
-                                ? 'sem %'
-                                : '${formatSigned(percent, maxDecimals: 0)}%',
-                            style: context.text.labelMedium?.tabular.copyWith(
-                              color: colors.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-            ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [name, const SizedBox(height: 2), ...lines],
+                    ),
+                  ),
+                  if (spark != null) ...[
+                    spark,
+                    const SizedBox(width: AppSpace.md),
+                  ],
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minWidth: 64),
+                    child: change,
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

@@ -96,7 +96,7 @@ class PlansScreen extends ConsumerWidget {
               if (index == 0) {
                 return Text(
                   '${list.length} ${list.length == 1 ? 'ficha' : 'fichas'} · '
-                  'toque para ver, ▶ para treinar',
+                  'toque para ver ou inicie pelo botão ao lado',
                   style: context.text.bodyMedium?.copyWith(
                     color: context.colors.onSurfaceVariant,
                   ),

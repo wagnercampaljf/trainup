@@ -191,8 +191,8 @@ class _HeroButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    return SizedBox(
-      height: AppTheme.largeButtonHeight,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: AppTheme.largeButtonHeight),
       child: FilledButton.icon(
         style: FilledButton.styleFrom(
           backgroundColor: colors.onPrimary,

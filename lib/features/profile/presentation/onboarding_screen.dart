@@ -96,9 +96,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(AppSpace.lg),
-              child: SizedBox(
-                width: double.infinity,
-                height: AppTheme.largeButtonHeight,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: double.infinity,
+                  minHeight: AppTheme.largeButtonHeight,
+                ),
                 child: FilledButton.icon(
                   key: const Key('onboarding_next'),
                   onPressed: _saving ? null : (_step == 0 ? _next : _finish),

@@ -444,8 +444,10 @@ class _RestDock extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (allDone) ...[
-                  SizedBox(
-                    height: AppTheme.largeButtonHeight,
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minHeight: AppTheme.largeButtonHeight,
+                    ),
                     child: FilledButton.icon(
                       key: const Key('finish_workout_done'),
                       onPressed: onFinish,

@@ -6,6 +6,7 @@ import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../core/widgets/action_bar.dart';
 import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/section_header.dart';
 import '../../../core/widgets/stat_tile.dart';
@@ -98,53 +99,27 @@ class _WorkoutSummaryScreenState extends ConsumerState<WorkoutSummaryScreen> {
           return _SummaryBody(data: data, notes: _notes);
         },
       ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpace.page,
-            AppSpace.sm,
-            AppSpace.page,
-            AppSpace.md,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Concluir guarda a observação e abre o treino no histórico.',
-                textAlign: TextAlign.center,
-                style: context.text.bodySmall,
-              ),
-              const SizedBox(height: AppSpace.sm),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      key: const Key('summary_share'),
-                      onPressed: switch (summary.value) {
-                        final data? => () => showShareWorkoutSheet(
-                          context,
-                          detail: data.detail,
-                          records: data.records,
-                        ),
-                        null => null,
-                      },
-                      icon: const Icon(Icons.share),
-                      label: const Text('Compartilhar'),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpace.md),
-                  Expanded(
-                    child: FilledButton.icon(
-                      key: const Key('summary_done'),
-                      onPressed: _saving ? null : _done,
-                      icon: const Icon(Icons.check),
-                      label: const Text('Concluir'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+      bottomNavigationBar: ActionBar(
+        note: 'Concluir guarda a observação e abre o treino no histórico.',
+        minRowWidth: 360,
+        secondary: OutlinedButton.icon(
+          key: const Key('summary_share'),
+          onPressed: switch (summary.value) {
+            final data? => () => showShareWorkoutSheet(
+              context,
+              detail: data.detail,
+              records: data.records,
+            ),
+            null => null,
+          },
+          icon: const Icon(Icons.share),
+          label: const Text('Compartilhar'),
+        ),
+        primary: FilledButton.icon(
+          key: const Key('summary_done'),
+          onPressed: _saving ? null : _done,
+          icon: const Icon(Icons.check),
+          label: const Text('Concluir'),
         ),
       ),
     );

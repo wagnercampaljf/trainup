@@ -6,6 +6,7 @@ import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../core/widgets/action_bar.dart';
 import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/confirmation_dialog.dart';
 import '../../../core/widgets/empty_state.dart';
@@ -98,39 +99,18 @@ class PlanDetailScreen extends ConsumerWidget {
         },
       ),
       bottomNavigationBar: hasExercises
-          ? SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpace.page,
-                  AppSpace.sm,
-                  AppSpace.page,
-                  AppSpace.md,
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: AppTheme.largeButtonHeight,
-                      child: OutlinedButton.icon(
-                        key: const Key('edit_plan'),
-                        onPressed: () => context.push(Routes.editPlan(planId)),
-                        icon: const Icon(Icons.edit_outlined),
-                        label: const Text('Editar'),
-                      ),
-                    ),
-                    const SizedBox(width: AppSpace.md),
-                    Expanded(
-                      child: SizedBox(
-                        height: AppTheme.largeButtonHeight,
-                        child: FilledButton.icon(
-                          key: const Key('start_workout'),
-                          onPressed: () => startWorkout(context, ref, planId),
-                          icon: const Icon(Icons.play_arrow_rounded),
-                          label: const Text('Iniciar treino'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+          ? ActionBar(
+              secondary: OutlinedButton.icon(
+                key: const Key('edit_plan'),
+                onPressed: () => context.push(Routes.editPlan(planId)),
+                icon: const Icon(Icons.edit_outlined),
+                label: const Text('Editar'),
+              ),
+              primary: FilledButton.icon(
+                key: const Key('start_workout'),
+                onPressed: () => startWorkout(context, ref, planId),
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: const Text('Iniciar treino'),
               ),
             )
           : null,
@@ -222,8 +202,13 @@ class _PlanDetailBody extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: 32,
-                          height: 32,
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpace.xs,
+                          ),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: colors.primaryContainer,

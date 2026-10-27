@@ -42,12 +42,18 @@ class AppShell extends StatelessWidget {
     return RunningSessionGuard(
       child: Scaffold(
         body: navigationShell,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: navigationShell.currentIndex,
-          destinations: _destinations,
-          onDestinationSelected: (index) => navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
+        // Cinco rótulos curtos dividem a largura: com fonte muito ampliada
+        // eles quebrariam no meio da palavra. A escala é limitada só aqui
+        // (os ícones também identificam cada aba).
+        bottomNavigationBar: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: 1.15,
+          child: NavigationBar(
+            selectedIndex: navigationShell.currentIndex,
+            destinations: _destinations,
+            onDestinationSelected: (index) => navigationShell.goBranch(
+              index,
+              initialLocation: index == navigationShell.currentIndex,
+            ),
           ),
         ),
       ),

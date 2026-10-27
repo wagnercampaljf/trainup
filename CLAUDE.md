@@ -70,7 +70,8 @@ Feature-first (`lib/features/<feature>/{data,domain,presentation}`), plus `lib/c
   - `TimerSnapshot` stores status, duration, `startedAt` and `elapsedBefore`. The remaining time is always derived from the clock (`clockProvider`), which survives background and restarts.
   - One `TimerController` owns the only `Timer.periodic`, which exists only while the timer is running.
   - `TimerOverlay` sits in `MaterialApp.builder`, above the Navigator. It must always return the **same `Stack` structure**: swapping between `child` and `Stack` remounts the Navigator and loses screen state.
-  - The button snaps to the nearest side and is hidden while the timer bottom sheet is open (`timerSheetOpenProvider`).
+  - The button snaps to the nearest side. It only floats while a rest is active (running, paused or finished). It is hidden while the timer bottom sheet is open (`timerSheetOpenProvider`), while the keyboard is open, and while a screen has the timer docked (`timerDockedProvider`).
+  - The running workout screen docks the same `TimerButton(docked: true)` in its bottom bar, with pause and +15s. It tracks visibility with `RouteAware` on `appRouteObserver`, which only fires for `PageRoute`s, so dialogs don't count. When the timer is idle, it is reached from the Home header (`home_timer`) or the workout dock.
   - Finishing or cancelling a workout resets the timer.
   - Sound: `AlertFeedback` plays `assets/sounds/rest_end.wav` via audioplayers (alarm usage, ducks other audio). The same file is at `android/app/src/main/res/raw/rest_end.wav` for the notification channel. Both come from `node tool/generate_rest_sound.js`. Android channel sound is immutable, so changing it means new channel ids (`_v3`…) and deleting the old ones in `RestAlarm._init`.
   - Locked screen/background: `app.dart` schedules a local notification (`RestAlarm`, flutter_local_notifications) on `onHide` and cancels it on `onShow`. In-app feedback is skipped on resume when the system alarm already fired. `RestAlarm` is a no-op outside Android/iOS, so tests need no override.
@@ -78,7 +79,16 @@ Feature-first (`lib/features/<feature>/{data,domain,presentation}`), plus `lib/c
 - **Plan export/import**: the JSON format is defined in `workout_plans/domain/plan_transfer.dart`, which has a `version` field. Exercises are matched by `normalizeName`. Import only adds plans and never overwrites.
 - **Theme**: `core/theme/app_theme.dart`.
   - Brand colors live in `AppColors` (primary blue `#2563EB` / `#8AB4FF`; green = completed/progress; red only for errors).
-  - The scheme is composed from Material 3 `fromSeed` variants.
+  - The scheme is composed from Material 3 `fromSeed` variants, with custom cool-gray neutrals. Cards use `AppTheme.cardColor` (white in light mode, `surfaceContainerLow` in dark).
+  - Shared tokens are `AppSpace`, `AppRadius` and `AppMotion` (`AppMotion.of` respects reduced motion), plus `AppButtons.destructive` and `.tabular` for numbers. Don't use loose numbers or uppercase labels.
+  - Type scale: titles and numbers (`display*`, `headline*`, `titleLarge`) use Roboto Condensed Bold, bundled in `assets/fonts` under Apache 2.0, with its license registered in `main.dart`. Body text uses the system font, at weights 400 and 600.
+  - Shared widgets:
+    - `StatGrid` groups `StatTile`s in one panel.
+    - `EmptyState` has primary and secondary actions.
+    - `AsyncValueWidget`/`ErrorState` take `onRetry` and never show raw exceptions.
+    - Failure snackbars go through `context.showError(action, e)`, which uses `friendlyError`.
+    - Bottom actions use `ActionBar`, which stacks buttons when the width over the text scale is too small.
+  - Layouts must hold at 320/360/390 pt with text scale 1.0/1.3/2.0. Use minimum heights, not fixed ones, on buttons with text. `SetRow`, the load cards and `ActionBar` switch to stacked layouts.
   - `test/unit/theme_contrast_test.dart` enforces WCAG contrast. Re-run it when changing colors.
 - **Privacy policy**: the single source is `features/settings/domain/privacy_policy.dart`. Regenerate the HTML after edits; `test/unit/privacy_policy_test.dart` fails if the two diverge. The app collects no email (the column stays, written empty).
 
@@ -103,6 +113,10 @@ Feature-first (`lib/features/<feature>/{data,domain,presentation}`), plus `lib/c
 - DB work triggered by the UI runs in the fake-async zone and only progresses with `pump`. Don't poll the DB inside `tester.runAsync` while UI writes are pending: it deadlocks. Seed data with `runAsync` before pumping the app, and read results afterwards.
 - `tester.pageBack()` doesn't find `material_ui` back buttons. Use `tester.tap(find.byType(BackButton))`.
 - `matchesGoldenFile` writes images at logical size, and flutter_test replaces shadows with solid outlines (`debugDisableShadows`). For real-resolution captures, use `RenderRepaintBoundary.toImage(pixelRatio: …)` inside `runAsync` and load Roboto/MaterialIcons from `~/development/flutter/bin/cache/artifacts/material_fonts`.
+- Screen captures:
+  - `bash tool/docker_flutter.sh test test/screenshots --dart-define=CAPTURE_DIR=build/screenshots/after` renders the main screens in both themes at 360, 320×1.3 and 390×2.0. Without `CAPTURE_DIR`, the file is a no-op in the normal suite.
+  - Demo data lives only in `test/helpers/demo_data.dart`.
+  - The test fonts have no emoji or "→", which show as boxes. Devices fall back to system fonts.
 
 ## Docs
 

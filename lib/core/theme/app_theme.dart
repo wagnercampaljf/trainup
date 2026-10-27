@@ -300,6 +300,8 @@ abstract final class AppTheme {
         indicatorColor: scheme.primaryContainer,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => textTheme.labelMedium?.copyWith(
+            fontSize: 11.5,
+            letterSpacing: 0,
             color: states.contains(WidgetState.selected)
                 ? scheme.onSurface
                 : scheme.onSurfaceVariant,

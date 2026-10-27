@@ -36,12 +36,18 @@ banco SQLite local no aparelho.
   (1080×1920, formato story) com os números do treino e abre o
   compartilhamento do sistema (Instagram, WhatsApp…).
 - **Exportar e importar fichas** (arquivo `.json`): o personal monta as fichas,
-  envia o arquivo, e o aluno importa em *Fichas > ⋮ > Importar fichas*.
+  envia o arquivo, e o aluno importa pelo Início (primeiro uso), pelo estado
+  vazio ou pelo atalho "Recebeu uma ficha?" em *Fichas* (também em ⋮).
   Exercícios são associados pelo nome; os que faltam são criados. A importação
   só adiciona fichas e nunca altera as existentes.
 - **Histórico** paginado e detalhe de cada treino, com **calendário do mês**
-  (dias treinados marcados; tocar no dia abre o treino).
-- **Frequência na Home**: treinos da semana (segunda a domingo) contra a
+  (treinado, hoje e selecionado diferenciados também por forma); tocar no dia
+  filtra a lista (vários treinos no mesmo dia aparecem juntos) e "Mostrar
+  todos" limpa o filtro.
+- **Início orientado à próxima ação**: retomar o treino em andamento ou
+  iniciar com um toque a ficha há mais tempo sem treinar (critério exibido),
+  até 3 outras fichas e os números do mês.
+- **Frequência no Início**: treinos da semana (segunda a domingo) contra a
   **meta semanal** (Configurações, 1 a 7), dias treinados, total do mês e do
   mês anterior e sequência de semanas cumprindo a meta.
 - **Evolução da carga** (Evolução > Cargas): para cada exercício, a maior carga
@@ -51,8 +57,9 @@ banco SQLite local no aparelho.
   volume, gráfico (maior peso, peso médio, volume total, melhor série) com
   inicial/atual/maior/evolução absoluta e percentual.
 - **Minha evolução**: gráficos de peso, gordura e de cada medida corporal.
-- **Temporizador global** acessível de qualquer tela (botão flutuante
-  arrastável), com presets, ±15 s, pausar/continuar/resetar, duração
+- **Temporizador global**: encaixado na barra inferior do treino (com pausar
+  e +15 s); fora do treino, um ícone no Início e, com descanso ativo, um botão
+  flutuante arrastável (some com o teclado aberto), com presets, ±15 s, pausar/continuar/resetar, duração
   personalizada, início automático ao concluir série, vibração/som ao terminar.
   Sobrevive a navegação, segundo plano e fechamento do app. Ao terminar,
   mostra "Descanso concluído" com um **X**; após 5 s o aviso minimiza para um
@@ -77,7 +84,7 @@ apps de saúde/fitness, práticas de modo escuro e acessibilidade.
 | Primária — azul elétrico | `#2563EB` | `#8AB4FF` | ações principais, próxima série, gráficos, timer contando |
 | Terciária — verde de progresso | `#006E2F` | `#4BE277` | série concluída, barra de progresso, "Descanso concluído", recordes |
 | Erro — vermelho | `#BA1A1A` | `#FFB4AB` | somente erros e ações destrutivas |
-| Superfície | `#FAF8FF` | `#121318` | fundos neutros frios (escuro "quase preto") |
+| Superfície | `#F4F6F8` | `#0E1115` | fundo da tela; cartões em `#FFFFFF` / `#171B20` |
 
 Por quê:
 
@@ -105,13 +112,31 @@ Por quê:
   (ícones ✓, contornos e textos acompanham), conforme
   [WCAG 1.4.1 e 1.4.11](https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html).
 
+**Identidade visual.** Títulos e números usam Roboto Condensed Bold (Apache
+2.0, incluída no app, funciona offline), com algarismos tabulares; o texto
+corrido usa a fonte do sistema. Espaçamentos, raios e durações de animação
+são tokens compartilhados (`AppSpace`, `AppRadius`, `AppMotion`, que
+respeita "remover animações"). O maior destaque (painel azul) fica só na
+ação principal de cada tela.
+
 O esquema é gerado pelo Material 3 a partir das cores da marca
-(`lib/core/theme/app_theme.dart`): base `tonalSpot` para superfícies
-neutras e containers suaves, primária azul fixa e terciária verde em tons
+(`lib/core/theme/app_theme.dart`): base `tonalSpot` para containers suaves,
+neutros próprios em cinza-grafite, primária azul fixa e terciária verde em tons
 vivos (`fidelity`). O tema antigo usava laranja em `tonalSpot`, que gerava
 tons amarronzados e superfícies bege.
 
-Capturas (geradas em teste de widget, sem aparelho) em
+Capturas atuais (geradas em teste de widget, sem aparelho, por
+`test/screenshots/capture_test.dart`) em
+[`docs/screenshots/ux/`](docs/screenshots/ux/):
+
+| Claro | Escuro |
+|---|---|
+| ![Início](docs/screenshots/ux/01_inicio_light_360.png) | ![Início](docs/screenshots/ux/01_inicio_dark_360.png) |
+| ![Treino com descanso](docs/screenshots/ux/03_treino_timer_rodando_light_360.png) | ![Treino com descanso](docs/screenshots/ux/03_treino_timer_rodando_dark_360.png) |
+| ![Histórico](docs/screenshots/ux/07_historico_light_360.png) | ![Histórico](docs/screenshots/ux/07_historico_dark_360.png) |
+| ![Evolução do exercício](docs/screenshots/ux/09_exercicio_detalhe_light_360.png) | ![Evolução do exercício](docs/screenshots/ux/09_exercicio_detalhe_dark_360.png) |
+
+Capturas anteriores (histórico, antes do redesenho) em
 [`docs/screenshots/`](docs/screenshots/):
 
 | Claro | Escuro |
