@@ -6,6 +6,7 @@ import '../../../core/database/app_database.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/confirmation_dialog.dart';
 import '../data/workout_plan_repository.dart';
 import '../domain/plan_models.dart';
@@ -136,7 +137,7 @@ class _PlanEditorScreenState extends ConsumerState<PlanEditorScreen> {
             TextButton(
               key: const Key('save_plan'),
               onPressed: _saving || _draft == null ? null : _save,
-              child: const Text('SALVAR'),
+              child: const Text('Salvar'),
             ),
           ],
         ),
@@ -144,16 +145,10 @@ class _PlanEditorScreenState extends ConsumerState<PlanEditorScreen> {
           future: _loading,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  'Não foi possível carregar a ficha.\n${snapshot.error}',
-                ),
-              );
+              return ErrorState(error: snapshot.error!);
             }
             final draft = _draft;
-            if (draft == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
+            if (draft == null) return const LoadingState();
             return Form(
               key: _formKey,
               child: ReorderableListView.builder(
@@ -166,7 +161,7 @@ class _PlanEditorScreenState extends ConsumerState<PlanEditorScreen> {
                     key: const Key('add_exercise'),
                     onPressed: _addExercise,
                     icon: const Icon(Icons.add),
-                    label: const Text('ADICIONAR EXERCÍCIO'),
+                    label: const Text('Adicionar exercício'),
                   ),
                 ),
                 itemCount: draft.exercises.length,
@@ -185,6 +180,17 @@ class _PlanEditorScreenState extends ConsumerState<PlanEditorScreen> {
                       index: index,
                       onChanged: _changed,
                       onRemove: () => _removeExercise(exercise),
+                      isLast: index == draft.exercises.length - 1,
+                      onMove: (delta) {
+                        final target = index + delta;
+                        if (target < 0 || target >= draft.exercises.length) {
+                          return;
+                        }
+                        draft.exercises
+                          ..removeAt(index)
+                          ..insert(target, exercise);
+                        _changed();
+                      },
                     ),
                   );
                 },
@@ -240,7 +246,8 @@ class _PlanHeaderFields extends StatelessWidget {
           Text(
             draft.exercises.isEmpty
                 ? 'Adicione os exercícios da ficha.'
-                : 'Exercícios (arraste para reordenar)',
+                : 'Exercícios · arraste pela alça ou use o menu ⋮ para '
+                      'reordenar',
             style: context.text.titleSmall,
           ),
         ],

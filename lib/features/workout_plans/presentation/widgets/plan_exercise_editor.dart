@@ -14,6 +14,8 @@ class PlanExerciseEditor extends StatelessWidget {
     required this.index,
     required this.onChanged,
     required this.onRemove,
+    this.onMove,
+    this.isLast = false,
     super.key,
   });
 
@@ -21,6 +23,10 @@ class PlanExerciseEditor extends StatelessWidget {
   final int index;
   final VoidCallback onChanged;
   final VoidCallback onRemove;
+
+  /// Move o exercício (−1 sobe, +1 desce): alternativa acessível ao arraste.
+  final ValueChanged<int>? onMove;
+  final bool isLast;
 
   void _addSet() {
     final last = exercise.sets.lastOrNull;
@@ -42,11 +48,15 @@ class PlanExerciseEditor extends StatelessWidget {
               children: [
                 ReorderableDragStartListener(
                   index: index,
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Icon(
-                      Icons.drag_indicator,
-                      semanticLabel: 'Arrastar',
+                  child: Tooltip(
+                    message: 'Arraste para reordenar',
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Icon(
+                        Icons.drag_indicator,
+                        color: context.colors.onSurfaceVariant,
+                        semanticLabel: 'Arrastar para reordenar',
+                      ),
                     ),
                   ),
                 ),
@@ -67,10 +77,48 @@ class PlanExerciseEditor extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  tooltip: 'Remover ${exercise.exerciseName}',
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: onRemove,
+                PopupMenuButton<String>(
+                  key: Key('plan_exercise_menu_$index'),
+                  tooltip: 'Opções de ${exercise.exerciseName}',
+                  onSelected: (action) => switch (action) {
+                    'up' => onMove?.call(-1),
+                    'down' => onMove?.call(1),
+                    _ => onRemove(),
+                  },
+                  itemBuilder: (context) => [
+                    if (onMove != null && index > 0)
+                      const PopupMenuItem(
+                        value: 'up',
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(Icons.arrow_upward),
+                          title: Text('Mover para cima'),
+                        ),
+                      ),
+                    if (onMove != null && !isLast)
+                      const PopupMenuItem(
+                        value: 'down',
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(Icons.arrow_downward),
+                          title: Text('Mover para baixo'),
+                        ),
+                      ),
+                    PopupMenuItem(
+                      value: 'remove',
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Icon(
+                          Icons.delete_outline,
+                          color: context.colors.error,
+                        ),
+                        title: Text(
+                          'Remover da ficha',
+                          style: TextStyle(color: context.colors.error),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -203,7 +251,7 @@ class _PlanSetRow extends StatelessWidget {
               ),
               inputFormatters: [_decimalInput],
               decoration: const InputDecoration(
-                labelText: 'Peso',
+                labelText: 'Carga',
                 suffixText: 'kg',
                 isDense: true,
               ),
@@ -219,9 +267,29 @@ class _PlanSetRow extends StatelessWidget {
             tooltip: 'Opções da série ${index + 1}',
             onSelected: (action) =>
                 action == 'duplicate' ? onDuplicate() : onRemove(),
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'duplicate', child: Text('Duplicar série')),
-              PopupMenuItem(value: 'remove', child: Text('Remover série')),
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'duplicate',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.content_copy),
+                  title: Text('Duplicar série'),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'remove',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(
+                    Icons.delete_outline,
+                    color: context.colors.error,
+                  ),
+                  title: Text(
+                    'Remover série',
+                    style: TextStyle(color: context.colors.error),
+                  ),
+                ),
+              ),
             ],
           ),
         ],

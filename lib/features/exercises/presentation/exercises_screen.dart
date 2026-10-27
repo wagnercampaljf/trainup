@@ -115,14 +115,38 @@ class _ExercisesScreenState extends ConsumerState<ExercisesScreen> {
                 }
                 return ListView.separated(
                   padding: const EdgeInsets.fromLTRB(16, 4, 16, 160),
-                  itemCount: list.length,
+                  itemCount: list.length + (widget.pickMode ? 1 : 0),
                   separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
+                  itemBuilder: (context, position) {
+                    if (widget.pickMode && position == 0) {
+                      return Text(
+                        'Toque no exercício para adicioná-lo. ⓘ mostra os '
+                        'detalhes e a evolução.',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      );
+                    }
+                    final index = widget.pickMode ? position - 1 : position;
                     final exercise = list[index];
                     return ExerciseCard(
                       exercise: exercise,
                       trailing: widget.pickMode
-                          ? const Icon(Icons.add_circle_outline)
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  tooltip: 'Detalhes de ${exercise.name}',
+                                  icon: const Icon(Icons.info_outline),
+                                  onPressed: () => context.push(
+                                    Routes.exercise(exercise.id),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.add_circle,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  semanticLabel: 'Adicionar',
+                                ),
+                              ],
+                            )
                           : null,
                       onTap: () => widget.pickMode
                           ? context.pop(exercise)
