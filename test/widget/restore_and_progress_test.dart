@@ -132,16 +132,23 @@ void main() {
   ) async {
     final db = await seed(tester);
     await openApp(tester, db);
-    expect(find.byKey(const Key('timer_button')), findsOneWidget);
-
-    await tester.tap(find.byKey(const Key('timer_button')));
+    // Parado, o timer não flutua sobre o conteúdo; o acesso é o ícone do
+    // Início.
+    expect(find.byKey(const Key('timer_button')), findsNothing);
+    await tester.tap(find.byKey(const Key('home_timer')));
     await settle(tester);
     expect(find.text('Pronto para iniciar'), findsOneWidget);
+
+    // Com o descanso contando, o botão flutuante aparece, mas some enquanto
+    // os controles estão abertos.
+    await tester.tap(find.text('60s'));
+    await settle(tester, 3);
+    expect(find.text('Descansando…'), findsOneWidget);
     expect(find.byKey(const Key('timer_button')), findsNothing);
 
     await tester.tapAt(const Offset(200, 40));
     await settle(tester);
-    expect(find.text('Pronto para iniciar'), findsNothing);
+    expect(find.text('Descansando…'), findsNothing);
     expect(find.byKey(const Key('timer_button')), findsOneWidget);
     // A navegação continua intacta (nada foi remontado).
     expect(find.text('Olá, Wagner'), findsOneWidget);

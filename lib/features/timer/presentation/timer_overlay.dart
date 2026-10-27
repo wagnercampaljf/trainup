@@ -7,15 +7,17 @@ import '../../../core/router/app_router.dart';
 import '../../profile/presentation/onboarding_status.dart';
 import 'timer_bottom_sheet.dart';
 import 'timer_button.dart';
+import 'timer_controller.dart';
 
 /// Mantém o [TimerButton] visível sobre todas as telas do app.
 ///
 /// Fica acima do Navigator (via `MaterialApp.builder`), então não é
 /// reconstruído/perdido ao navegar. O botão pode ser arrastado.
 ///
-/// Some quando os controles estão abertos, quando o teclado está aberto e
-/// quando a tela visível tem o temporizador encaixado (treino em
-/// andamento, [timerDockedProvider]).
+/// Aparece só com descanso ativo (contando, pausado ou concluído). Some
+/// quando os controles estão abertos, quando o teclado está aberto e quando
+/// a tela visível tem o temporizador encaixado (treino em andamento,
+/// [timerDockedProvider]).
 class TimerOverlay extends ConsumerStatefulWidget {
   const TimerOverlay({required this.child, super.key});
 
@@ -117,6 +119,11 @@ class _TimerOverlayState extends ConsumerState<TimerOverlay> {
     final onboarding = ref.watch(onboardingStatusProvider);
     final sheetOpen = ref.watch(timerSheetOpenProvider);
     final docked = ref.watch(timerDockedProvider);
+    // Parado, o timer não flutua sobre o conteúdo: o acesso fica no Início
+    // (ícone no cabeçalho) e na barra do treino.
+    final idle = ref.watch(
+      timerControllerProvider.select((s) => s.snapshot.isIdle),
+    );
     // Com o teclado aberto, o botão ficaria sobre o campo em edição (ou
     // escondido atrás do teclado): sai de cena até o teclado fechar.
     final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
@@ -125,7 +132,8 @@ class _TimerOverlayState extends ConsumerState<TimerOverlay> {
       builder: (context, completed, _) {
         // A estrutura (Stack) é sempre a mesma: trocar entre `child` e
         // `Stack` remontaria o Navigator e perderia o estado das telas.
-        final showButton = completed && !sheetOpen && !docked && !keyboardOpen;
+        final showButton =
+            completed && !idle && !sheetOpen && !docked && !keyboardOpen;
         return Stack(
           children: [
             widget.child,

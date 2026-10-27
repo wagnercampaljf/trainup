@@ -137,6 +137,12 @@ void main() {
       ProviderScope(
         overrides: [
           timerRepositoryProvider.overrideWithValue(_MemoryTimerRepository()),
+          // Parado o botão não flutua; pausado ele aparece (compacto).
+          initialTimerSnapshotProvider.overrideWithValue(
+            const TimerSnapshot.idle(Duration(seconds: 90))
+                .start(now)
+                .pause(now),
+          ),
           clockProvider.overrideWithValue(() => now),
           alertFeedbackProvider.overrideWithValue(_SilentFeedback()),
           onboardingStatusProvider.overrideWithValue(

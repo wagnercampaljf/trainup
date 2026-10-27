@@ -18,6 +18,7 @@ import '../../progress/presentation/widgets/frequency_card.dart';
 import '../../workout_plans/data/workout_plan_repository.dart';
 import '../../workout_plans/domain/plan_models.dart';
 import '../../workout_plans/presentation/plan_transfer_actions.dart';
+import '../../timer/presentation/timer_bottom_sheet.dart';
 import '../../workouts/data/workout_session_repository.dart';
 import '../../workouts/presentation/start_workout.dart';
 import '../domain/next_plan.dart';
@@ -54,14 +55,36 @@ class HomeScreen extends ConsumerWidget {
             AppSpace.listBottom,
           ),
           children: [
-            Text(
-              DateFormat("EEEE, d 'de' MMMM", appLocale).format(now),
-              style: context.text.labelLarge?.copyWith(
-                color: context.colors.onSurfaceVariant,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        DateFormat("EEEE, d 'de' MMMM", appLocale).format(now),
+                        style: context.text.labelLarge?.copyWith(
+                          color: context.colors.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpace.xs),
+                      Text(
+                        'Olá, $firstName',
+                        style: context.text.headlineMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                // Acesso discreto ao timer fora do treino (com descanso
+                // ativo, o botão flutuante também aparece).
+                IconButton.outlined(
+                  key: const Key('home_timer'),
+                  tooltip: 'Temporizador de descanso',
+                  onPressed: () => showTimerBottomSheet(context),
+                  icon: const Icon(Icons.timer_outlined),
+                ),
+              ],
             ),
-            const SizedBox(height: AppSpace.xs),
-            Text('Olá, $firstName', style: context.text.headlineMedium),
             const SizedBox(height: AppSpace.lg),
             if (running != null)
               _ResumeCard(session: running)

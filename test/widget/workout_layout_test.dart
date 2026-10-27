@@ -74,7 +74,8 @@ void main() {
   ) async {
     final (db, sessionId) = await seedRunning(tester);
     final container = await openApp(tester, db);
-    expect(timerButton, findsOneWidget);
+    // Parado, não flutua sobre o Início.
+    expect(timerButton, findsNothing);
 
     unawaited(rootNavigatorKey.currentContext!.push(Routes.workout(sessionId)));
     await settle(tester);
@@ -109,7 +110,11 @@ void main() {
 
   testWidgets('teclado aberto esconde o botão flutuante', (tester) async {
     final (db, _) = await seedRunning(tester);
-    await openApp(tester, db);
+    final container = await openApp(tester, db);
+    container
+        .read(timerControllerProvider.notifier)
+        .start(const Duration(seconds: 90));
+    await settle(tester, 3);
     expect(timerButton, findsOneWidget);
     tester.view.viewInsets = const FakeViewPadding(bottom: 900);
     await settle(tester, 2);
@@ -117,6 +122,8 @@ void main() {
     tester.view.resetViewInsets();
     await settle(tester, 2);
     expect(timerButton, findsOneWidget);
+    container.read(timerControllerProvider.notifier).reset();
+    await settle(tester, 3);
   });
 
   for (final (width, scale) in const [
