@@ -88,19 +88,41 @@ class ExerciseStats {
   final double? maxVolume;
 }
 
-/// Exercício com histórico (lista da tela de evolução).
-class ExerciseWithHistory {
-  const ExerciseWithHistory({
+/// Evolução da carga de um exercício (lista da tela de evolução): a maior
+/// carga de cada treino, em ordem cronológica.
+class ExerciseLoadEvolution {
+  const ExerciseLoadEvolution({
     required this.exerciseId,
     required this.name,
-    required this.sessionCount,
     required this.lastDate,
+    required this.maxWeights,
   });
 
   final int exerciseId;
   final String name;
-  final int sessionCount;
   final DateTime lastDate;
+
+  /// Maior carga por treino, do mais antigo para o mais recente. Nunca vazia.
+  final List<double> maxWeights;
+
+  int get sessionCount => maxWeights.length;
+
+  double get firstWeight => maxWeights.first;
+
+  double get lastWeight => maxWeights.last;
+
+  double get bestWeight => maxWeights.reduce((a, b) => a > b ? a : b);
+
+  /// Diferença entre o treino mais recente e o primeiro (kg).
+  double get change => lastWeight - firstWeight;
+
+  /// Evolução percentual; `null` com um só treino ou carga inicial zero.
+  double? get percent =>
+      sessionCount < 2 || firstWeight == 0 ? null : change / firstWeight * 100;
+
+  /// O treino mais recente bateu a maior carga registrada (com evolução).
+  bool get isAtBest =>
+      sessionCount > 1 && lastWeight >= bestWeight && change > 0;
 }
 
 /// Indicadores resumidos da Home.

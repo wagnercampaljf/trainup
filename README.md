@@ -39,7 +39,14 @@ banco SQLite local no aparelho.
   envia o arquivo, e o aluno importa em *Fichas > ⋮ > Importar fichas*.
   Exercícios são associados pelo nome; os que faltam são criados. A importação
   só adiciona fichas e nunca altera as existentes.
-- **Histórico** paginado e detalhe de cada treino.
+- **Histórico** paginado e detalhe de cada treino, com **calendário do mês**
+  (dias treinados marcados; tocar no dia abre o treino).
+- **Frequência na Home**: treinos da semana (segunda a domingo) contra a
+  **meta semanal** (Configurações, 1 a 7), dias treinados, total do mês e do
+  mês anterior e sequência de semanas cumprindo a meta.
+- **Evolução da carga** (Evolução > Cargas): para cada exercício, a maior carga
+  do primeiro e do último treino, a diferença em kg e %, a maior carga já
+  registrada e um minigráfico; tocar abre o gráfico completo.
 - **Histórico por exercício**: maior carga, última carga, nº de treinos, maior
   volume, gráfico (maior peso, peso médio, volume total, melhor série) com
   inicial/atual/maior/evolução absoluta e percentual.
@@ -289,10 +296,11 @@ Detalhes do modelo em [docs/architecture.md](docs/architecture.md).
 
 ## Limitações conhecidas
 
-- **Som do timer:** sem plugin de áudio, o app usa os sons de sistema do
-  Flutter. No Android/iOS, `SystemSoundType.alert` é ignorado e o "clique"
-  depende das configurações do aparelho; a vibração funciona normalmente.
-  Um som próprio exigiria um plugin de áudio (ex.: `audioplayers`).
+- **Som do timer:** o sinal "bip-bip-biiip" é próprio do app
+  (`tool/generate_rest_sound.js`) e toca como alarme, com `audioplayers`, ou
+  seja, sai mesmo com o volume de mídia baixo. A música de outros apps só
+  abaixa enquanto ele toca. No iPhone, a notificação com a tela bloqueada
+  usa o som padrão do sistema.
 - **Aviso com o celular bloqueado:** usa `flutter_local_notifications`. No
   Android 13+ o app pede a permissão de notificações no primeiro descanso. No
   Android 14+, "Alarmes e lembretes" vem negado por padrão; sem ele o aviso

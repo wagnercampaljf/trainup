@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/database/database_provider.dart';
 import '../../../core/utils/clock.dart';
+import '../../settings/presentation/settings_controller.dart';
 import '../../workouts/domain/session_status.dart';
 import '../domain/exercise_progress.dart';
+import '../domain/training_frequency.dart';
 
 class ProgressRepository {
   ProgressRepository(this._db);
@@ -62,33 +64,72 @@ class ProgressRepository {
     return entries;
   }
 
-  /// Exercícios que possuem ao menos uma série concluída.
-  Stream<List<ExerciseWithHistory>> watchExercisesWithHistory() => _db
+  /// Evolução da carga (maior peso por treino) de cada exercício com ao
+  /// menos uma série concluída, do treinado mais recentemente ao mais antigo.
+  Stream<List<ExerciseLoadEvolution>> watchLoadEvolution() => _db
       .customSelect(
         '''
-        SELECT e.id, e.name, COUNT(DISTINCT s.id) AS session_count,
-               MAX(s.started_at) AS last_date
-        FROM exercises e
-        JOIN workout_session_exercises se ON se.exercise_id = e.id
+        SELECT e.id, e.name, s.started_at, MAX(ss.weight_kg) AS max_weight
+        FROM workout_session_sets ss
+        JOIN workout_session_exercises se ON se.id = ss.session_exercise_id
         JOIN workout_sessions s ON s.id = se.session_id
-        WHERE s.status = ? AND EXISTS (
-          SELECT 1 FROM workout_session_sets ss
-          WHERE ss.session_exercise_id = se.id AND ss.completed = 1 AND ss.repetitions > 0)
-        GROUP BY e.id
-        ORDER BY last_date DESC
+        JOIN exercises e ON e.id = se.exercise_id
+        WHERE s.status = ? AND ss.completed = 1 AND ss.repetitions > 0
+        GROUP BY e.id, s.id
+        ORDER BY s.started_at, s.id
         ''',
         variables: [_completed],
         readsFrom: _tables,
       )
       .watch()
+      .map((rows) {
+        final names = <int, String>{};
+        final weights = <int, List<double>>{};
+        final lastDates = <int, DateTime>{};
+        for (final r in rows) {
+          final id = r.read<int>('id');
+          names[id] = r.read<String>('name');
+          (weights[id] ??= []).add(r.read<double>('max_weight'));
+          lastDates[id] = r.read<DateTime>('started_at');
+        }
+        return [
+          for (final id in names.keys)
+            ExerciseLoadEvolution(
+              exerciseId: id,
+              name: names[id]!,
+              lastDate: lastDates[id]!,
+              maxWeights: weights[id]!,
+            ),
+        ]..sort((a, b) => b.lastDate.compareTo(a.lastDate));
+      });
+
+  /// Treinos concluídos desde [from], em ordem cronológica.
+  Stream<List<CompletedWorkout>> watchCompletedWorkouts({
+    required DateTime from,
+    DateTime? until,
+  }) => _db
+      .customSelect(
+        '''
+        SELECT id, started_at, plan_name_snapshot FROM workout_sessions
+        WHERE status = ? AND started_at >= ?
+          ${until == null ? '' : 'AND started_at < ?'}
+        ORDER BY started_at, id
+        ''',
+        variables: [
+          _completed,
+          Variable.withDateTime(from),
+          if (until != null) Variable.withDateTime(until),
+        ],
+        readsFrom: {_db.workoutSessions},
+      )
+      .watch()
       .map(
         (rows) => [
           for (final r in rows)
-            ExerciseWithHistory(
-              exerciseId: r.read<int>('id'),
-              name: r.read<String>('name'),
-              sessionCount: r.read<int>('session_count'),
-              lastDate: r.read<DateTime>('last_date'),
+            (
+              id: r.read<int>('id'),
+              startedAt: r.read<DateTime>('started_at'),
+              planName: r.read<String>('plan_name_snapshot'),
             ),
         ],
       );
@@ -168,9 +209,36 @@ final exerciseHistoryProvider =
           .watchExerciseHistory(exerciseId),
     );
 
-final exercisesWithHistoryProvider = StreamProvider<List<ExerciseWithHistory>>(
-  (ref) => ref.watch(progressRepositoryProvider).watchExercisesWithHistory(),
+final loadEvolutionProvider = StreamProvider<List<ExerciseLoadEvolution>>(
+  (ref) => ref.watch(progressRepositoryProvider).watchLoadEvolution(),
 );
+
+/// Frequência da semana e do mês, com a meta das configurações.
+final trainingFrequencyProvider = StreamProvider<TrainingFrequency>((ref) {
+  final now = ref.watch(clockProvider)();
+  final goal = ref.watch(settingsProvider.select((s) => s.weeklyGoal));
+  return ref
+      .watch(progressRepositoryProvider)
+      .watchCompletedWorkouts(from: TrainingFrequency.historyStart(now))
+      .map(
+        (workouts) => TrainingFrequency.from(
+          workouts.map((w) => w.startedAt),
+          now: now,
+          weeklyGoal: goal,
+        ),
+      );
+});
+
+/// Treinos concluídos no mês de [month] (calendário do histórico).
+final monthWorkoutsProvider =
+    StreamProvider.family<List<CompletedWorkout>, DateTime>(
+      (ref, month) => ref
+          .watch(progressRepositoryProvider)
+          .watchCompletedWorkouts(
+            from: DateTime(month.year, month.month),
+            until: DateTime(month.year, month.month + 1),
+          ),
+    );
 
 final dashboardStatsProvider = StreamProvider<DashboardStats>((ref) {
   final now = ref.watch(clockProvider)();

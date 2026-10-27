@@ -232,6 +232,12 @@ class AppSettings extends Table {
   TextColumn get weightUnit =>
       textEnum<WeightUnit>().withDefault(Constant(WeightUnit.kg.name))();
 
+  /// Meta de treinos por semana (schema v2). A restrição fica na coluna para
+  /// valer também em bancos migrados com `addColumn`.
+  IntColumn get weeklyGoal => integer()
+      .check(const CustomExpression<bool>('weekly_goal BETWEEN 1 AND 7'))
+      .withDefault(const Constant(3))();
+
   @override
   Set<Column<Object>> get primaryKey => {id};
 

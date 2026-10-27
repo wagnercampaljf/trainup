@@ -39,7 +39,6 @@ class $UserProfilesTable extends UserProfiles
     'id',
     aliasedName,
     false,
-    check: () => id.equals(1),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultValue: const Constant(1),
@@ -95,7 +94,6 @@ class $UserProfilesTable extends UserProfiles
     'height_cm',
     aliasedName,
     false,
-    check: () => ComparableExpr(heightCm).isBetweenValues(50, 272),
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
@@ -568,7 +566,6 @@ class $BodyMeasurementsTable extends BodyMeasurements
     'weight_kg',
     aliasedName,
     false,
-    check: () => ComparableExpr(weightKg).isBetweenValues(20, 400),
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
@@ -581,7 +578,6 @@ class $BodyMeasurementsTable extends BodyMeasurements
         'body_fat_percentage',
         aliasedName,
         true,
-        check: () => ComparableExpr(bodyFatPercentage).isBetweenValues(0, 100),
         type: DriftSqlType.double,
         requiredDuringInsert: false,
       );
@@ -2828,7 +2824,6 @@ class $WorkoutPlanExercisesTable extends WorkoutPlanExercises
     'rest_seconds',
     aliasedName,
     true,
-    check: () => ComparableExpr(restSeconds).isBetweenValues(0, 3600),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
@@ -3300,7 +3295,6 @@ class $WorkoutPlanSetsTable extends WorkoutPlanSets
     'repetitions',
     aliasedName,
     false,
-    check: () => ComparableExpr(repetitions).isBiggerOrEqualValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -3312,7 +3306,6 @@ class $WorkoutPlanSetsTable extends WorkoutPlanSets
     'weight_kg',
     aliasedName,
     false,
-    check: () => ComparableExpr(weightKg).isBiggerOrEqualValue(0),
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
@@ -3760,7 +3753,6 @@ class $WorkoutSessionsTable extends WorkoutSessions
     'duration_seconds',
     aliasedName,
     true,
-    check: () => ComparableExpr(durationSeconds).isBiggerOrEqualValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
@@ -5021,7 +5013,6 @@ class $WorkoutSessionSetsTable extends WorkoutSessionSets
     'repetitions',
     aliasedName,
     false,
-    check: () => ComparableExpr(repetitions).isBiggerOrEqualValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
@@ -5033,7 +5024,6 @@ class $WorkoutSessionSetsTable extends WorkoutSessionSets
     'weight_kg',
     aliasedName,
     false,
-    check: () => ComparableExpr(weightKg).isBiggerOrEqualValue(0),
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
@@ -5548,7 +5538,6 @@ class $AppSettingsTable extends AppSettings
     'id',
     aliasedName,
     false,
-    check: () => id.equals(1),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultValue: const Constant(1),
@@ -5615,7 +5604,6 @@ class $AppSettingsTable extends AppSettings
     'default_rest_seconds',
     aliasedName,
     false,
-    check: () => ComparableExpr(defaultRestSeconds).isBetweenValues(5, 3600),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultValue: const Constant(90),
@@ -5629,8 +5617,6 @@ class $AppSettingsTable extends AppSettings
         'weight_increment_kg',
         aliasedName,
         false,
-        check: () =>
-            ComparableExpr(weightIncrementKg).isBetweenValues(0.25, 50),
         type: DriftSqlType.double,
         requiredDuringInsert: false,
         defaultValue: const Constant(2.5),
@@ -5645,6 +5631,19 @@ class $AppSettingsTable extends AppSettings
         requiredDuringInsert: false,
         defaultValue: Constant(WeightUnit.kg.name),
       ).withConverter<WeightUnit>($AppSettingsTable.$converterweightUnit);
+  static const VerificationMeta _weeklyGoalMeta = const VerificationMeta(
+    'weeklyGoal',
+  );
+  @override
+  late final GeneratedColumn<int> weeklyGoal = GeneratedColumn<int>(
+    'weekly_goal',
+    aliasedName,
+    false,
+    check: () => const CustomExpression<bool>('weekly_goal BETWEEN 1 AND 7'),
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(3),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -5655,6 +5654,7 @@ class $AppSettingsTable extends AppSettings
     defaultRestSeconds,
     weightIncrementKg,
     weightUnit,
+    weeklyGoal,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -5713,6 +5713,12 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('weekly_goal')) {
+      context.handle(
+        _weeklyGoalMeta,
+        weeklyGoal.isAcceptableOrUnknown(data['weekly_goal']!, _weeklyGoalMeta),
+      );
+    }
     return context;
   }
 
@@ -5758,6 +5764,10 @@ class $AppSettingsTable extends AppSettings
           data['${effectivePrefix}weight_unit'],
         )!,
       ),
+      weeklyGoal: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}weekly_goal'],
+      )!,
     );
   }
 
@@ -5783,6 +5793,10 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
   final int defaultRestSeconds;
   final double weightIncrementKg;
   final WeightUnit weightUnit;
+
+  /// Meta de treinos por semana (schema v2). A restrição fica na coluna para
+  /// valer também em bancos migrados com `addColumn`.
+  final int weeklyGoal;
   const AppSettingsRow({
     required this.id,
     required this.themePreference,
@@ -5792,6 +5806,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     required this.defaultRestSeconds,
     required this.weightIncrementKg,
     required this.weightUnit,
+    required this.weeklyGoal,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -5812,6 +5827,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
         $AppSettingsTable.$converterweightUnit.toSql(weightUnit),
       );
     }
+    map['weekly_goal'] = Variable<int>(weeklyGoal);
     return map;
   }
 
@@ -5825,6 +5841,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       defaultRestSeconds: Value(defaultRestSeconds),
       weightIncrementKg: Value(weightIncrementKg),
       weightUnit: Value(weightUnit),
+      weeklyGoal: Value(weeklyGoal),
     );
   }
 
@@ -5846,6 +5863,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       weightUnit: $AppSettingsTable.$converterweightUnit.fromJson(
         serializer.fromJson<String>(json['weightUnit']),
       ),
+      weeklyGoal: serializer.fromJson<int>(json['weeklyGoal']),
     );
   }
   @override
@@ -5864,6 +5882,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       'weightUnit': serializer.toJson<String>(
         $AppSettingsTable.$converterweightUnit.toJson(weightUnit),
       ),
+      'weeklyGoal': serializer.toJson<int>(weeklyGoal),
     };
   }
 
@@ -5876,6 +5895,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     int? defaultRestSeconds,
     double? weightIncrementKg,
     WeightUnit? weightUnit,
+    int? weeklyGoal,
   }) => AppSettingsRow(
     id: id ?? this.id,
     themePreference: themePreference ?? this.themePreference,
@@ -5885,6 +5905,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     defaultRestSeconds: defaultRestSeconds ?? this.defaultRestSeconds,
     weightIncrementKg: weightIncrementKg ?? this.weightIncrementKg,
     weightUnit: weightUnit ?? this.weightUnit,
+    weeklyGoal: weeklyGoal ?? this.weeklyGoal,
   );
   AppSettingsRow copyWithCompanion(AppSettingsCompanion data) {
     return AppSettingsRow(
@@ -5910,6 +5931,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       weightUnit: data.weightUnit.present
           ? data.weightUnit.value
           : this.weightUnit,
+      weeklyGoal: data.weeklyGoal.present
+          ? data.weeklyGoal.value
+          : this.weeklyGoal,
     );
   }
 
@@ -5923,7 +5947,8 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           ..write('timerVibration: $timerVibration, ')
           ..write('defaultRestSeconds: $defaultRestSeconds, ')
           ..write('weightIncrementKg: $weightIncrementKg, ')
-          ..write('weightUnit: $weightUnit')
+          ..write('weightUnit: $weightUnit, ')
+          ..write('weeklyGoal: $weeklyGoal')
           ..write(')'))
         .toString();
   }
@@ -5938,6 +5963,7 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     defaultRestSeconds,
     weightIncrementKg,
     weightUnit,
+    weeklyGoal,
   );
   @override
   bool operator ==(Object other) =>
@@ -5950,7 +5976,8 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           other.timerVibration == this.timerVibration &&
           other.defaultRestSeconds == this.defaultRestSeconds &&
           other.weightIncrementKg == this.weightIncrementKg &&
-          other.weightUnit == this.weightUnit);
+          other.weightUnit == this.weightUnit &&
+          other.weeklyGoal == this.weeklyGoal);
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
@@ -5962,6 +5989,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
   final Value<int> defaultRestSeconds;
   final Value<double> weightIncrementKg;
   final Value<WeightUnit> weightUnit;
+  final Value<int> weeklyGoal;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
     this.themePreference = const Value.absent(),
@@ -5971,6 +5999,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     this.defaultRestSeconds = const Value.absent(),
     this.weightIncrementKg = const Value.absent(),
     this.weightUnit = const Value.absent(),
+    this.weeklyGoal = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.id = const Value.absent(),
@@ -5981,6 +6010,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     this.defaultRestSeconds = const Value.absent(),
     this.weightIncrementKg = const Value.absent(),
     this.weightUnit = const Value.absent(),
+    this.weeklyGoal = const Value.absent(),
   });
   static Insertable<AppSettingsRow> custom({
     Expression<int>? id,
@@ -5991,6 +6021,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     Expression<int>? defaultRestSeconds,
     Expression<double>? weightIncrementKg,
     Expression<String>? weightUnit,
+    Expression<int>? weeklyGoal,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -6002,6 +6033,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
         'default_rest_seconds': defaultRestSeconds,
       if (weightIncrementKg != null) 'weight_increment_kg': weightIncrementKg,
       if (weightUnit != null) 'weight_unit': weightUnit,
+      if (weeklyGoal != null) 'weekly_goal': weeklyGoal,
     });
   }
 
@@ -6014,6 +6046,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     Value<int>? defaultRestSeconds,
     Value<double>? weightIncrementKg,
     Value<WeightUnit>? weightUnit,
+    Value<int>? weeklyGoal,
   }) {
     return AppSettingsCompanion(
       id: id ?? this.id,
@@ -6024,6 +6057,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
       defaultRestSeconds: defaultRestSeconds ?? this.defaultRestSeconds,
       weightIncrementKg: weightIncrementKg ?? this.weightIncrementKg,
       weightUnit: weightUnit ?? this.weightUnit,
+      weeklyGoal: weeklyGoal ?? this.weeklyGoal,
     );
   }
 
@@ -6060,6 +6094,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
         $AppSettingsTable.$converterweightUnit.toSql(weightUnit.value),
       );
     }
+    if (weeklyGoal.present) {
+      map['weekly_goal'] = Variable<int>(weeklyGoal.value);
+    }
     return map;
   }
 
@@ -6073,7 +6110,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
           ..write('timerVibration: $timerVibration, ')
           ..write('defaultRestSeconds: $defaultRestSeconds, ')
           ..write('weightIncrementKg: $weightIncrementKg, ')
-          ..write('weightUnit: $weightUnit')
+          ..write('weightUnit: $weightUnit, ')
+          ..write('weeklyGoal: $weeklyGoal')
           ..write(')'))
         .toString();
   }
@@ -6091,7 +6129,6 @@ class $TimerStatesTable extends TimerStates
     'id',
     aliasedName,
     false,
-    check: () => id.equals(1),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultValue: const Constant(1),
@@ -11057,6 +11094,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<int> defaultRestSeconds,
       Value<double> weightIncrementKg,
       Value<WeightUnit> weightUnit,
+      Value<int> weeklyGoal,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
@@ -11068,6 +11106,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<int> defaultRestSeconds,
       Value<double> weightIncrementKg,
       Value<WeightUnit> weightUnit,
+      Value<int> weeklyGoal,
     });
 
 class $$AppSettingsTableFilterComposer
@@ -11120,6 +11159,11 @@ class $$AppSettingsTableFilterComposer
     column: $table.weightUnit,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
+
+  ColumnFilters<int> get weeklyGoal => $composableBuilder(
+    column: $table.weeklyGoal,
+    builder: (column) => ColumnFilters(column),
+  );
 }
 
 class $$AppSettingsTableOrderingComposer
@@ -11168,6 +11212,11 @@ class $$AppSettingsTableOrderingComposer
 
   ColumnOrderings<String> get weightUnit => $composableBuilder(
     column: $table.weightUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get weeklyGoal => $composableBuilder(
+    column: $table.weeklyGoal,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -11220,6 +11269,11 @@ class $$AppSettingsTableAnnotationComposer
         column: $table.weightUnit,
         builder: (column) => column,
       );
+
+  GeneratedColumn<int> get weeklyGoal => $composableBuilder(
+    column: $table.weeklyGoal,
+    builder: (column) => column,
+  );
 }
 
 class $$AppSettingsTableTableManager
@@ -11261,6 +11315,7 @@ class $$AppSettingsTableTableManager
                 Value<int> defaultRestSeconds = const Value.absent(),
                 Value<double> weightIncrementKg = const Value.absent(),
                 Value<WeightUnit> weightUnit = const Value.absent(),
+                Value<int> weeklyGoal = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
                 themePreference: themePreference,
@@ -11270,6 +11325,7 @@ class $$AppSettingsTableTableManager
                 defaultRestSeconds: defaultRestSeconds,
                 weightIncrementKg: weightIncrementKg,
                 weightUnit: weightUnit,
+                weeklyGoal: weeklyGoal,
               ),
           createCompanionCallback:
               ({
@@ -11281,6 +11337,7 @@ class $$AppSettingsTableTableManager
                 Value<int> defaultRestSeconds = const Value.absent(),
                 Value<double> weightIncrementKg = const Value.absent(),
                 Value<WeightUnit> weightUnit = const Value.absent(),
+                Value<int> weeklyGoal = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
                 themePreference: themePreference,
@@ -11290,6 +11347,7 @@ class $$AppSettingsTableTableManager
                 defaultRestSeconds: defaultRestSeconds,
                 weightIncrementKg: weightIncrementKg,
                 weightUnit: weightUnit,
+                weeklyGoal: weeklyGoal,
               ),
           withReferenceMapper: (p0) => p0
               .map(

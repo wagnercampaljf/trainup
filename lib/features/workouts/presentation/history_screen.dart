@@ -6,6 +6,7 @@ import '../../../core/router/routes.dart';
 import '../../../core/widgets/async_value_widget.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../data/workout_session_repository.dart';
+import 'widgets/month_calendar.dart';
 import 'widgets/session_summary_card.dart';
 
 /// Histórico de treinos concluídos (carregamento paginado).
@@ -41,9 +42,12 @@ class HistoryScreen extends ConsumerWidget {
             },
             child: ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 160),
-              itemCount: sessions.length + (canLoadMore ? 1 : 0),
+              // Item 0: calendário do mês; depois, os treinos.
+              itemCount: 1 + sessions.length + (canLoadMore ? 1 : 0),
               separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
+              itemBuilder: (context, position) {
+                if (position == 0) return const MonthCalendar();
+                final index = position - 1;
                 if (index == sessions.length) {
                   return Center(
                     child: TextButton(

@@ -32,18 +32,29 @@ class RestAlarm {
         AndroidFlutterLocalNotificationsPlugin
       >();
 
-  Future<bool> _init() => _initialized ??= _plugin
-      .initialize(
-        settings: const InitializationSettings(
-          android: AndroidInitializationSettings('ic_launcher_monochrome'),
-          iOS: DarwinInitializationSettings(
-            requestAlertPermission: false,
-            requestBadgePermission: false,
-            requestSoundPermission: false,
-          ),
+  Future<bool> _init() => _initialized ??= () async {
+    final ok = await _plugin.initialize(
+      settings: const InitializationSettings(
+        android: AndroidInitializationSettings('ic_launcher_monochrome'),
+        iOS: DarwinInitializationSettings(
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
         ),
-      )
-      .then((ok) => ok ?? false);
+      ),
+    );
+    // Canais da 1.1.0, com o som padrão do sistema.
+    for (final id in _oldChannelIds) {
+      await _android?.deleteNotificationChannel(channelId: id);
+    }
+    return ok ?? false;
+  }();
+
+  static const _oldChannelIds = [
+    'rest_end_sound_vibration',
+    'rest_end_vibration',
+    'rest_end_sound',
+  ];
 
   /// Agenda o aviso para [endsAt]. Substitui um aviso já agendado.
   Future<void> schedule(
@@ -73,6 +84,7 @@ class RestAlarm {
           category: AndroidNotificationCategory.alarm,
           visibility: NotificationVisibility.public,
           playSound: sound,
+          sound: sound ? _sound : null,
           enableVibration: vibrate,
           vibrationPattern: vibrate ? _vibrationPattern : null,
           audioAttributesUsage: AudioAttributesUsage.alarm,
@@ -132,12 +144,17 @@ class RestAlarm {
 
 final _vibrationPattern = Int64List.fromList([0, 600, 300, 600, 300, 600]);
 
+/// Mesmo sinal tocado com o app aberto (`res/raw/rest_end.wav`, gerado por
+/// `tool/generate_rest_sound.js`).
+const _sound = RawResourceAndroidNotificationSound('rest_end');
+
 /// Canais de notificação do Android: som e vibração de um canal não mudam
 /// depois de criado, então há um canal por combinação das configurações.
+/// Os ids têm versão: trocar o som exige canais novos (ver [_oldChannelIds]).
 enum _Channel {
-  soundAndVibration('rest_end_sound_vibration', 'Fim do descanso'),
-  vibrationOnly('rest_end_vibration', 'Fim do descanso (só vibração)'),
-  soundOnly('rest_end_sound', 'Fim do descanso (só som)');
+  soundAndVibration('rest_end_sound_vibration_v2', 'Fim do descanso'),
+  vibrationOnly('rest_end_vibration_v2', 'Fim do descanso (só vibração)'),
+  soundOnly('rest_end_sound_v2', 'Fim do descanso (só som)');
 
   const _Channel(this.id, this.name);
 

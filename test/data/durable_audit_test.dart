@@ -18,10 +18,13 @@ import 'package:trainup/features/workouts/data/workout_session_repository.dart';
 
 import '../helpers/fixtures.dart';
 
+const _currentVersion = AppDatabase.currentSchemaVersion;
+
+/// Simula uma versão futura sem passo de migração escrito.
 class _UnsupportedUpgrade extends AppDatabase {
   _UnsupportedUpgrade(super.executor);
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => _currentVersion + 1;
 }
 
 void main() {
@@ -169,7 +172,7 @@ void main() {
     expect(await db.customSelect('PRAGMA foreign_key_check').get(), isEmpty);
   });
 
-  test('upgrade sem passo explícito falha sem apagar banco v1', () async {
+  test('upgrade sem passo explícito falha sem apagar o banco atual', () async {
     final directory = await Directory.systemTemp.createTemp(
       'trainup_migration_',
     );
@@ -193,7 +196,7 @@ void main() {
       expect(
         (await reopened.customSelect('PRAGMA user_version').getSingle())
             .read<int>('user_version'),
-        1,
+        _currentVersion,
       );
     } finally {
       await reopened.close();

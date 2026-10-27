@@ -14,6 +14,14 @@ String formatShortDate(DateTime date) => _shortDate.format(date);
 
 String formatDateTime(DateTime date) => _dateTime.format(date);
 
+final _monthYear = DateFormat("MMMM 'de' y", appLocale);
+
+/// Mês por extenso com inicial maiúscula: "Outubro de 2026".
+String formatMonthYear(DateTime date) {
+  final text = _monthYear.format(date);
+  return text.isEmpty ? text : text[0].toUpperCase() + text.substring(1);
+}
+
 /// Número com vírgula decimal e separador de milhar (pt-BR).
 String formatDecimal(num value, {int maxDecimals = 2}) {
   final format = NumberFormat.decimalPattern(appLocale)

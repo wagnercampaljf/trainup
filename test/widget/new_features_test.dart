@@ -184,7 +184,11 @@ void main() {
     // A captura da imagem usa o motor de renderização real.
     await tester.runAsync(() async {
       await tester.tap(find.byKey(const Key('share_workout_image')));
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      // A geração do PNG é assíncrona e mais lenta com a suíte inteira
+      // rodando: espera o resultado, com limite.
+      for (var i = 0; i < 100 && sharing.shared.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      }
     });
     await settle(tester);
     expect(sharing.shared, hasLength(1));

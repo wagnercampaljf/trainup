@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/utils/alert_feedback.dart';
 import '../../../core/utils/formatters.dart';
 import '../../timer/domain/rest_options.dart';
 import '../../timer/presentation/rest_alarm_permission_notice.dart';
@@ -53,6 +54,15 @@ class SettingsScreen extends ConsumerWidget {
             onChanged: (v) =>
                 controller.update((s) => s.copyWith(timerSound: v)),
           ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              key: const Key('test_timer_sound'),
+              onPressed: () => ref.read(alertFeedbackProvider).playSound(),
+              icon: const Icon(Icons.volume_up_outlined),
+              label: const Text('Testar som'),
+            ),
+          ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text('Vibração ao terminar'),
@@ -85,6 +95,28 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           Text('Treino', style: context.text.titleSmall),
           const SizedBox(height: 8),
+          DropdownButtonFormField<int>(
+            key: const Key('weekly_goal'),
+            isExpanded: true,
+            initialValue: settings.weeklyGoal,
+            decoration: const InputDecoration(
+              labelText: 'Meta de treinos por semana',
+              helperText: 'Usada no acompanhamento da semana, na Home',
+            ),
+            items: [
+              for (var goal = 1; goal <= 7; goal++)
+                DropdownMenuItem(
+                  value: goal,
+                  child: Text(goal == 1 ? '1 treino' : '$goal treinos'),
+                ),
+            ],
+            onChanged: (v) {
+              if (v != null) {
+                controller.update((s) => s.copyWith(weeklyGoal: v));
+              }
+            },
+          ),
+          const SizedBox(height: 16),
           DropdownButtonFormField<double>(
             isExpanded: true,
             initialValue: incrementOptions.contains(settings.weightIncrementKg)

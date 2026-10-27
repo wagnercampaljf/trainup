@@ -36,5 +36,6 @@ final initialSettingsProvider = Provider<AppSettingsRow>(
     defaultRestSeconds: 90,
     weightIncrementKg: 2.5,
     weightUnit: WeightUnit.kg,
+    weeklyGoal: 3,
   ),
 );

@@ -10,6 +10,7 @@ import '../../../core/widgets/stat_tile.dart';
 import '../../body_measurements/data/body_measurement_repository.dart';
 import '../../profile/data/profile_repository.dart';
 import '../../progress/data/progress_repository.dart';
+import '../../progress/presentation/widgets/frequency_card.dart';
 import '../../workout_plans/data/workout_plan_repository.dart';
 import '../../workout_plans/presentation/widgets/workout_plan_card.dart';
 import '../../workouts/data/workout_session_repository.dart';
@@ -54,6 +55,9 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
             ],
+            const SectionHeader('Frequência'),
+            const FrequencyCard(),
+            const SizedBox(height: 8),
             const SectionHeader('Treinar hoje'),
             if (plans.isEmpty)
               Card(

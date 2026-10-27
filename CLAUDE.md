@@ -72,6 +72,7 @@ Feature-first (`lib/features/<feature>/{data,domain,presentation}`), plus `lib/c
   - `TimerOverlay` sits in `MaterialApp.builder`, above the Navigator. It must always return the **same `Stack` structure**: swapping between `child` and `Stack` remounts the Navigator and loses screen state.
   - The button snaps to the nearest side and is hidden while the timer bottom sheet is open (`timerSheetOpenProvider`).
   - Finishing or cancelling a workout resets the timer.
+  - Sound: `AlertFeedback` plays `assets/sounds/rest_end.wav` via audioplayers (alarm usage, ducks other audio). The same file is at `android/app/src/main/res/raw/rest_end.wav` for the notification channel. Both come from `node tool/generate_rest_sound.js`. Android channel sound is immutable, so changing it means new channel ids (`_v3`…) and deleting the old ones in `RestAlarm._init`.
   - Locked screen/background: `app.dart` schedules a local notification (`RestAlarm`, flutter_local_notifications) on `onHide` and cancels it on `onShow`. In-app feedback is skipped on resume when the system alarm already fired. `RestAlarm` is a no-op outside Android/iOS, so tests need no override.
 - **Platform I/O** (share sheet, file picker) goes through `fileSharingProvider` (`core/platform/file_sharing.dart`). Widget tests override it with a fake.
 - **Plan export/import**: the JSON format is defined in `workout_plans/domain/plan_transfer.dart`, which has a `version` field. Exercises are matched by `normalizeName`. Import only adds plans and never overwrites.
@@ -83,7 +84,12 @@ Feature-first (`lib/features/<feature>/{data,domain,presentation}`), plus `lib/c
 
 ## Data rules
 
-- `schemaVersion` is 1. `onUpgrade` runs explicit `_migrateStep` cases and throws on unknown versions. **Never recreate or drop tables.** To change the schema: bump the version, add a step, then run `dart run drift_dev make-migrations` (snapshots go in `drift_schemas/`).
+- `schemaVersion` is 2 (`AppDatabase.currentSchemaVersion`; v2 added `app_settings.weekly_goal`). `onUpgrade` runs explicit `_migrateStep` cases and throws on unknown versions. **Never recreate or drop tables.**
+- To change the schema:
+  1. Bump the version and add a step.
+  2. Run `dart run build_runner build`, then `dart run drift_dev make-migrations`. This writes snapshots to `drift_schemas/` and test schemas to `test/drift/`.
+  3. Extend `test/drift/app_database/migration_test.dart`. It was hand-edited, so don't let the generator template replace it.
+- New column constraints go on the column (`.check(...)`), not in `customConstraints`, so they also apply to `addColumn` on migrated DBs.
 - The DB file is `trainup.sqlite` in the app documents dir. `database_file.dart` renames the legacy `minha_ficha.sqlite` (and SQLite sidecar files) on first open. Never rename the file again without the same kind of migration.
 - A completed set counts in volume, records, charts and "último treino" only if `repetitions > 0`. Keep that filter consistent in new queries.
 - Plans and used exercises are soft-deleted (`is_active`). Exercise names are unique by `normalized_name`.

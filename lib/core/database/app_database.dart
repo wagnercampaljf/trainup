@@ -52,7 +52,9 @@ class AppDatabase extends _$AppDatabase {
   /// [_migrateStep] e rode `dart run drift_dev make-migrations`.
   /// Nunca apague/recrie tabelas com dados do usuário.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => currentSchemaVersion;
+
+  static const currentSchemaVersion = 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -73,9 +75,9 @@ class AppDatabase extends _$AppDatabase {
   /// Migra do schema [from] para `from + 1`.
   Future<void> _migrateStep(Migrator m, int from) async {
     switch (from) {
-      // Exemplo para a próxima versão:
-      // case 1:
-      //   await m.addColumn(exercises, exercises.someNewColumn);
+      case 1:
+        // v2: meta semanal de treinos (padrão 3).
+        await m.addColumn(appSettings, appSettings.weeklyGoal);
       default:
         throw StateError('Migração não suportada a partir da versão $from');
     }
