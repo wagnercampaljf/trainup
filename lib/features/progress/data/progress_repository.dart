@@ -86,11 +86,13 @@ class ProgressRepository {
         final names = <int, String>{};
         final weights = <int, List<double>>{};
         final lastDates = <int, DateTime>{};
+        final firstDates = <int, DateTime>{};
         for (final r in rows) {
           final id = r.read<int>('id');
           names[id] = r.read<String>('name');
           (weights[id] ??= []).add(r.read<double>('max_weight'));
           lastDates[id] = r.read<DateTime>('started_at');
+          firstDates.putIfAbsent(id, () => lastDates[id]!);
         }
         return [
           for (final id in names.keys)
@@ -98,6 +100,7 @@ class ProgressRepository {
               exerciseId: id,
               name: names[id]!,
               lastDate: lastDates[id]!,
+              firstDate: firstDates[id],
               maxWeights: weights[id]!,
             ),
         ]..sort((a, b) => b.lastDate.compareTo(a.lastDate));

@@ -147,7 +147,7 @@ void main() {
     await settle(tester);
     await tester.tap(find.byKey(const Key('confirm_finish')));
     await settle(tester);
-    expect(find.text('TREINO CONCLUÍDO'), findsOneWidget);
+    expect(find.text('Treino concluído'), findsOneWidget);
     // Finalizar o treino encerra o descanso pendente.
     expect(container.read(timerControllerProvider).snapshot.isIdle, isTrue);
     expect(find.text('1.030 kg'), findsOneWidget);

@@ -16,6 +16,7 @@ import 'package:trainup/features/profile/data/profile_repository.dart';
 import 'package:trainup/features/profile/presentation/onboarding_status.dart';
 import 'package:trainup/features/settings/data/settings_repository.dart';
 import 'package:trainup/features/workouts/data/workout_session_repository.dart';
+import 'package:trainup/features/workouts/presentation/widgets/session_summary_card.dart';
 
 import '../helpers/fixtures.dart';
 import '../helpers/test_database.dart';
@@ -144,8 +145,19 @@ void main() {
 
     expect(find.text(formatMonthYear(now)), findsOneWidget);
     expect(find.text('1 treino no mês'), findsOneWidget);
-    final today = now.subtract(const Duration(minutes: 90)).day;
+    final trainedAt = now.subtract(const Duration(minutes: 90));
+    final today = trainedAt.day;
+    // Tocar no dia filtra a lista; o filtro fica visível e pode ser limpo.
     await tester.tap(find.byKey(Key('calendar_day_$today')));
+    await settle(tester);
+    expect(find.text('Treinos de ${formatDate(trainedAt)}'), findsOneWidget);
+    expect(find.text('Todos os treinos'), findsNothing);
+    await tester.tap(find.byKey(const Key('history_clear_filter')));
+    await settle(tester);
+    expect(find.text('Todos os treinos'), findsOneWidget);
+    await tester.tap(find.byKey(Key('calendar_day_$today')));
+    await settle(tester);
+    await tester.tap(find.byType(SessionSummaryCard));
     await settle(tester);
     expect(find.byTooltip('Excluir treino'), findsOneWidget);
 

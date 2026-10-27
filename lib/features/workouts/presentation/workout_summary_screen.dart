@@ -4,8 +4,10 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/routes.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/async_value_widget.dart';
+import '../../../core/widgets/section_header.dart';
 import '../../../core/widgets/stat_tile.dart';
 import '../data/workout_session_repository.dart';
 import '../domain/session_models.dart';
@@ -98,31 +100,48 @@ class _WorkoutSummaryScreenState extends ConsumerState<WorkoutSummaryScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          child: Row(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpace.page,
+            AppSpace.sm,
+            AppSpace.page,
+            AppSpace.md,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  key: const Key('summary_share'),
-                  onPressed: switch (summary.value) {
-                    final data? => () => showShareWorkoutSheet(
-                      context,
-                      detail: data.detail,
-                      records: data.records,
-                    ),
-                    null => null,
-                  },
-                  icon: const Icon(Icons.share),
-                  label: const Text('COMPARTILHAR'),
-                ),
+              Text(
+                'Concluir guarda a observação e abre o treino no histórico.',
+                textAlign: TextAlign.center,
+                style: context.text.bodySmall,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: FilledButton(
-                  key: const Key('summary_done'),
-                  onPressed: _saving ? null : _done,
-                  child: const Text('CONCLUIR'),
-                ),
+              const SizedBox(height: AppSpace.sm),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      key: const Key('summary_share'),
+                      onPressed: switch (summary.value) {
+                        final data? => () => showShareWorkoutSheet(
+                          context,
+                          detail: data.detail,
+                          records: data.records,
+                        ),
+                        null => null,
+                      },
+                      icon: const Icon(Icons.share),
+                      label: const Text('Compartilhar'),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpace.md),
+                  Expanded(
+                    child: FilledButton.icon(
+                      key: const Key('summary_done'),
+                      onPressed: _saving ? null : _done,
+                      icon: const Icon(Icons.check),
+                      label: const Text('Concluir'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -144,28 +163,69 @@ class _SummaryBody extends StatelessWidget {
     final comparison = data.comparison;
     final records = data.records;
     final previousVolume = comparison.previousVolume;
+    final colors = context.colors;
+    final recordLines = [
+      if (records.totalVolume) 'Maior volume total em um treino',
+      for (final name in records.maxWeightExercises) '$name: maior carga',
+      for (final name in records.volumeExercises) '$name: maior volume',
+    ];
+    final volumeDiff = previousVolume == null
+        ? null
+        : detail.volume - previousVolume;
+    final increases = comparison.exercisesWithLoadIncrease;
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpace.page,
+        AppSpace.sm,
+        AppSpace.page,
+        AppSpace.xl,
+      ),
       children: [
-        Icon(
-          Icons.emoji_events_outlined,
-          size: 56,
-          color: context.colors.tertiary,
+        Center(
+          child: Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: colors.tertiaryContainer,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.check_rounded,
+              size: 40,
+              color: colors.onTertiaryContainer,
+            ),
+          ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          'TREINO CONCLUÍDO',
-          textAlign: TextAlign.center,
-          style: context.text.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
+        const SizedBox(height: AppSpace.md),
+        Semantics(
+          header: true,
+          child: Text(
+            'Treino concluído',
+            textAlign: TextAlign.center,
+            style: context.text.headlineMedium,
           ),
         ),
         Text(
-          detail.session.planNameSnapshot,
+          '${detail.session.planNameSnapshot} · '
+          '${formatDate(detail.session.startedAt)}',
           textAlign: TextAlign.center,
           style: context.text.titleMedium,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSpace.xs),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.cloud_done_outlined, size: 16, color: colors.tertiary),
+            const SizedBox(width: AppSpace.xs),
+            Flexible(
+              child: Text(
+                'Já salvo no histórico',
+                style: context.text.bodySmall,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpace.xl),
         StatGrid(
           children: [
             StatTile(
@@ -190,65 +250,92 @@ class _SummaryBody extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Comparação com o último treino',
-                  style: context.text.titleSmall,
-                ),
-                const SizedBox(height: 8),
-                if (previousVolume == null)
-                  const Text('Primeiro registro desta ficha.')
-                else
-                  Text(
-                    '${formatSigned(detail.volume - previousVolume, maxDecimals: 0)} '
-                    'kg de volume',
-                    style: context.text.bodyLarge,
-                  ),
-                Text(
-                  '${comparison.exercisesWithLoadIncrease} '
-                  '${comparison.exercisesWithLoadIncrease == 1 ? 'exercício' : 'exercícios'} '
-                  'com aumento de carga',
-                  style: context.text.bodyLarge,
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (!records.isEmpty) ...[
-          const SizedBox(height: 12),
+        if (recordLines.isNotEmpty) ...[
+          const SizedBox(height: AppSpace.md),
           Card(
+            key: const Key('summary_records'),
+            color: colors.tertiaryContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpace.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('🏆 Novo recorde', style: context.text.titleSmall),
-                  const SizedBox(height: 6),
-                  if (records.totalVolume)
-                    const Text('Maior volume total em um treino'),
-                  for (final name in records.maxWeightExercises)
-                    Text('$name: maior carga'),
-                  for (final name in records.volumeExercises)
-                    Text('$name: maior volume'),
+                  Text(
+                    '🏆 Novo recorde',
+                    style: context.text.titleLarge?.copyWith(
+                      color: colors.onTertiaryContainer,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpace.sm),
+                  for (final line in recordLines)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpace.xs),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.emoji_events_outlined,
+                            size: 18,
+                            color: colors.onTertiaryContainer,
+                          ),
+                          const SizedBox(width: AppSpace.sm),
+                          Expanded(
+                            child: Text(
+                              line,
+                              style: context.text.bodyMedium?.copyWith(
+                                color: colors.onTertiaryContainer,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
           ),
         ],
-        const SizedBox(height: 16),
+        const SectionHeader('Comparado ao último treino desta ficha'),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpace.lg),
+            child: volumeDiff == null
+                ? Text(
+                    'Primeiro registro desta ficha. A comparação aparece no '
+                    'próximo treino.',
+                    style: context.text.bodyMedium,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${formatSigned(volumeDiff, maxDecimals: 0)} '
+                        'kg de volume',
+                        style: context.text.titleLarge?.copyWith(
+                          color: volumeDiff > 0 ? colors.tertiary : null,
+                        ),
+                      ),
+                      Text(
+                        '$increases '
+                        '${increases == 1 ? 'exercício' : 'exercícios'} '
+                        'com aumento de carga',
+                        style: context.text.bodyLarge,
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+        const SectionHeader('Observação'),
         TextField(
           key: const Key('summary_notes'),
           controller: notes,
           maxLines: 3,
           textCapitalization: TextCapitalization.sentences,
           decoration: const InputDecoration(
-            labelText: 'Observação (opcional)',
+            labelText: 'Como foi o treino? (opcional)',
             hintText: 'Ex.: Treino muito bom.',
           ),
         ),

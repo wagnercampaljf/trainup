@@ -8,7 +8,6 @@ import '../../../../core/widgets/empty_state.dart';
 import '../../../body_measurements/data/body_measurement_repository.dart';
 import '../../../body_measurements/domain/body_metric.dart';
 import '../../domain/chart_point.dart';
-import '../../domain/progress_calculations.dart';
 import 'progress_chart.dart';
 import 'progress_summary.dart';
 
@@ -27,11 +26,15 @@ class _BodyProgressViewState extends ConsumerState<BodyProgressView> {
   Widget build(BuildContext context) {
     return AsyncValueWidget(
       value: ref.watch(bodyMeasurementsProvider),
+      onRetry: () => ref.invalidate(bodyMeasurementsProvider),
       data: (measurements) {
         if (measurements.isEmpty) {
           return EmptyState(
             icon: Icons.monitor_weight_outlined,
             message: 'Nenhuma medição registrada.',
+            description:
+                'Registre peso e medidas para acompanhar a evolução '
+                'corporal ao longo do tempo.',
             actionLabel: 'Registrar medição',
             onAction: () => context.push(Routes.newMeasurement),
           );
@@ -46,9 +49,6 @@ class _BodyProgressViewState extends ConsumerState<BodyProgressView> {
           for (final m in measurements.reversed)
             if (metric.valueOf(m) case final value?) ChartPoint(m.date, value),
         ];
-        final summary = ProgressSummary.fromValues([
-          for (final p in points) p.value,
-        ]);
         return ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 160),
           children: [
@@ -64,10 +64,20 @@ class _BodyProgressViewState extends ConsumerState<BodyProgressView> {
               onChanged: (m) => setState(() => _metric = m ?? _metric),
             ),
             const SizedBox(height: 16),
-            ProgressChart(points: points, unit: metric.unit),
+            // Sem verde/vermelho: subir ou descer depende do objetivo.
+            ProgressHighlight(
+              points: points,
+              unit: metric.unit,
+              judge: false,
+              countLabel: const ('registro', 'registros'),
+            ),
             const SizedBox(height: 12),
-            if (summary != null)
-              ProgressSummaryTiles(summary: summary, unit: metric.unit),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
+                child: ProgressChart(points: points, unit: metric.unit),
+              ),
+            ),
             const SizedBox(height: 16),
             Row(
               children: [

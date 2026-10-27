@@ -189,12 +189,18 @@ void main() {
     );
     await settle(tester);
 
-    expect(find.byType(LineChart), findsOneWidget);
-    expect(find.text('Maior carga'), findsOneWidget);
     expect(find.text('42,5 kg'), findsWidgets);
     expect(find.text('40 kg'), findsWidgets);
     expect(find.text('+2,5 kg'), findsOneWidget);
     expect(find.text('+6,3%'), findsOneWidget);
+    // Gráfico e recordes vêm depois do destaque.
+    await tester.scrollUntilVisible(
+      find.text('Maior carga'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.byType(LineChart), findsOneWidget);
+    expect(find.text('Maior carga'), findsOneWidget);
 
     container.read(appRouterProvider).go(Routes.progress);
     await settle(tester);

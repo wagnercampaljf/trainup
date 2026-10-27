@@ -564,6 +564,26 @@ class WorkoutSessionRepository {
       .watch()
       .map((rows) => rows.map(_toSummary).toList());
 
+  /// Treinos concluídos em um dia (filtro do calendário do histórico).
+  Stream<List<SessionSummary>> watchHistoryOnDay(DateTime day) {
+    final start = DateTime(day.year, day.month, day.day);
+    return _db
+        .customSelect(
+          '$_summarySelect WHERE s.status = ? AND s.started_at >= ? '
+          'AND s.started_at < ? ORDER BY s.started_at DESC, s.id DESC',
+          variables: [
+            _completed,
+            Variable.withDateTime(start),
+            Variable.withDateTime(
+              DateTime(start.year, start.month, start.day + 1),
+            ),
+          ],
+          readsFrom: _sessionTables,
+        )
+        .watch()
+        .map((rows) => rows.map(_toSummary).toList());
+  }
+
   Future<SessionSummary?> getSummary(int sessionId) async {
     final row = await _db
         .customSelect(
@@ -732,6 +752,12 @@ class HistoryLimit extends Notifier<int> {
 final historyLimitProvider = NotifierProvider<HistoryLimit, int>(
   HistoryLimit.new,
 );
+
+final dayHistoryProvider =
+    StreamProvider.family<List<SessionSummary>, DateTime>(
+      (ref, day) =>
+          ref.watch(workoutSessionRepositoryProvider).watchHistoryOnDay(day),
+    );
 
 final historyProvider = StreamProvider<List<SessionSummary>>((ref) {
   final limit = ref.watch(historyLimitProvider);

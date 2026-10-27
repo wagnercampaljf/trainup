@@ -96,11 +96,15 @@ class ExerciseLoadEvolution {
     required this.name,
     required this.lastDate,
     required this.maxWeights,
-  });
+    DateTime? firstDate,
+  }) : firstDate = firstDate ?? lastDate;
 
   final int exerciseId;
   final String name;
   final DateTime lastDate;
+
+  /// Data do primeiro treino (início do período comparado).
+  final DateTime firstDate;
 
   /// Maior carga por treino, do mais antigo para o mais recente. Nunca vazia.
   final List<double> maxWeights;
